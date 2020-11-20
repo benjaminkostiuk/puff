@@ -1,10 +1,13 @@
 <!-- This document is for outlining ideas about the api structure for unity-test -->
 
 
-## Endpoints
+# Endpoints
 
-### User
+## User
 POST `/user/{user_id}/class/{class_id}/enroll`: Enroll a user in a class
+
+PUT `/user/{user_id}/class/{class_id}/enroll`: Update a user's enrollment for a class
+body={class_enrollment}
 
 GET `/user/{user_id}/class`: Get a user's classes
 ?id={class_id}
@@ -12,8 +15,12 @@ GET `/user/{user_id}/class`: Get a user's classes
 ?level={class_level}
 ?term={class_term}
 ?year={class_academic_year}
+?pinned={true | false}
 
 POST `/user/{user_id}/assignments/{assignment_id}/enroll`: Assign an assignment to a user
+
+PUT `/user/{user_id}/assignment/{assignment_id}/enroll`: Update a user's enrollment for an assignment
+body={assignment_enrollment}
 
 GET `/user/{user_id}/assignments`: Get a user's assignments
 ?id={assignment_id}
@@ -21,12 +28,16 @@ GET `/user/{user_id}/assignments`: Get a user's assignments
 ?due_date={assignment_due_date}
 ?code={class_code}
 ?term={class_term}
+?pinned={true | false}
 
 GET `/user/{user_id}/testcase`: Get test cases written by a user
+?id={test_case_id}
+?assignment={assignment_id}
+?assignment_name={assignment_name}
 
 GET `/user/{user_id}/testresults`: Get test results ran by a user
 
-### Class
+## Class
 POST `/class`: Create a class
 body={Class}
 
@@ -44,7 +55,7 @@ GET `class/{class_id}/attr`: Get class attribute(s)
 ?id={class_attribute_id}
 ?name={class_attribute_name}
 
-### Assignments
+## Assignments
 POST `/assignment`: Create an assignment
 body={Assignment}
 
@@ -61,6 +72,28 @@ body={AssignmentAttribute}
 GET `/assignment/{assignment_id}/attr`: Get attributes for an assignment
 ?id={assignment_attribute_id}
 ?name={assignment_attribute_name}
+
+## Testing
+POST `/test/assignment/{assignment_id}/case`: Create a test case for an assignment
+body={TestCase}
+
+GET `/test/assignment/{assignment_id}/case`: Get test cases for an assignment
+?id={assignment_id}
+?voteScore={vote_score}
+
+PUT `/test/assignment/{assignment_id}/case`: Update a test case for an assignment
+body={TestCase}
+
+DELETE `/test/assignment/{assignment_id}/case`: Delete a test case for an assignment
+
+POST `/test/case/{case_id}/run`: Run a test case 
+body={Some way to pass assignment code}
+return={TestResult}
+
+POST `/compile/codeblock`: Compile a code block
+body={CodeBlock}
+
+## Engagement
 
 ### Vote
 POST `/source/{source_id}/vote`: Vote on a source
