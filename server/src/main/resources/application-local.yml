@@ -1,0 +1,10 @@
+# h2 database
+spring:
+  h2:
+    console:
+      path: db/h2
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
