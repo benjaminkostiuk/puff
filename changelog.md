@@ -1,3 +1,9 @@
+* Sun Nov 22 23:06 - Merge pull request #1 from benjaminkostiuk/develop @1a21344
+* Sun Nov 22 23:04 - Update Readme with setup and development instructions @20218ad
+* Sun Nov 22 22:44 - Moved diagrams and architecture into docs folder @cf10beb
+* Sun Nov 22 22:09 - Implement Swagger annotations and Javax Validation @e70acab
+* Sun Nov 22 21:16 - Setup JPA Rest API structure with h2 database @d13739a
+* Sun Nov 22 21:04 - Update boilerplate with new schema and runner @19e04b6
 * Thu Nov 19 22:14 - Cleaned up API architecture and regenerated changelog @9942813
 * Thu Nov 19 22:13 - Update schema with enrollment tables for users @882b1f6
 * Thu Nov 19 21:28 - Finalized first draft of API architecture for backend endpoints @0345d0e
