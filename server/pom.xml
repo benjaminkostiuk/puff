@@ -11,7 +11,7 @@
 	<groupId>com.benko</groupId>
 	<artifactId>unitytest</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>unitytest</name>
+	<name>unity-test</name>
 	<description>UnityTest</description>
 
 	<properties>
@@ -52,6 +52,12 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
 	</build>
 
 </project>
