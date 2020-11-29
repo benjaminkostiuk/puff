@@ -1,10 +1,10 @@
-package com.benko.unitytest;
+package com.unityTest.courseManagement;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class UnitytestApplicationTests {
+class CourseManagementApplicationTests {
 
 	@Test
 	void contextLoads() {

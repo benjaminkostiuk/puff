@@ -1,10 +1,12 @@
-package com.benko.unitytest.entity;
+package com.unityTest.courseManagement.entity;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 
 @Data
 @ApiModel(value = "Class")
@@ -25,9 +27,11 @@ public class Course {
     private String code;
 
     @ApiModelProperty("Program level")
+    @Min(1)
     @Column(name = "LEVEL")
     private int level;
 
+    @NotBlank
     @Column(name = "TERM")
     private String term;
 

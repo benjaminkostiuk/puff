@@ -1,8 +1,8 @@
-package com.benko.unitytest.serviceImpl;
+package com.unityTest.courseManagement.serviceImpl;
 
-import com.benko.unitytest.entity.Course;
-import com.benko.unitytest.repository.CourseRepository;
-import com.benko.unitytest.service.CourseService;
+import com.unityTest.courseManagement.entity.Course;
+import com.unityTest.courseManagement.repository.CourseRepository;
+import com.unityTest.courseManagement.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
-package com.benko.unitytest.service;
+package com.unityTest.courseManagement.service;
 
-import com.benko.unitytest.entity.Course;
+import com.unityTest.courseManagement.entity.Course;
 
 import java.util.List;
 

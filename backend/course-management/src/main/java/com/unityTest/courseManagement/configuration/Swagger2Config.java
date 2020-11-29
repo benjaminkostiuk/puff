@@ -1,4 +1,4 @@
-package com.benko.unitytest.configuration;
+package com.unityTest.courseManagement.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +20,7 @@ public class Swagger2Config {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors
-                    .basePackage("com.benko.unitytest.rest"))
+                    .basePackage("com.unityTest.courseManagement.rest"))
                 .paths(PathSelectors.regex("/.*"))
                 .build()
                 .apiInfo(apiEndPointsInfo());
@@ -35,5 +35,4 @@ public class Swagger2Config {
             .version("0.0.1")
             .build();
     }
-
 }

@@ -1,6 +1,6 @@
-package com.benko.unitytest.repository;
+package com.unityTest.courseManagement.repository;
 
-import com.benko.unitytest.entity.Course;
+import com.unityTest.courseManagement.entity.Course;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
