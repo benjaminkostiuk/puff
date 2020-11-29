@@ -1,6 +1,5 @@
 ## Overview
 <!-- Give a brief overview of your changes. -->
-
 Fixes/Implements/Refactors/Changes some feature...
 
 This change is a
@@ -27,5 +26,4 @@ This change is a
 ## Todos
 - [ ] Ensure unit tests pass
 - [ ] Update documentation for my changes (if necessary)
-- [ ] Add yourself to [CONTRIBUTING.md](../CONTRIBUTING.md)
 - [ ] Delete stale branch after merge
