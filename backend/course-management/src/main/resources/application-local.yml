@@ -1,0 +1,36 @@
+# server
+server:
+  port: 8080
+
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: admin
+    password:
+    driverClassName: org.h2.Driver
+    initialization-mode: always
+    schema: classpath:/db/h2/bootstrap_schema.sql
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+
+management:
+  server:
+    port: 8080
+    address: 127.0.0.1
+
+keycloak:
+  realm: library-test
+  auth-server-url: http://localhost:8180/auth
+  ssl-required: external
+  resource: springboot-microservice
+  credentials:
+    secret: ${CM_KEYCLOAK_SECRET}
+  principal-attribute: preferred_username
+  bearer-only: true
