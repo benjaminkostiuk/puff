@@ -13,11 +13,11 @@ spring:
     password:
     driverClassName: org.h2.Driver
     initialization-mode: always
-    schema: classpath:/db/h2/bootstrap_schema.sql
+    schema: classpath*:/db/h2/bootstrap_schema.sql
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     show-sql: true
 
 management:
