@@ -1,6 +1,5 @@
 package com.unityTest.courseManagement.entity;
 
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -10,12 +9,13 @@ import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * Models a university course for a given semester
  */
 @Data
-@ApiModel(value = "Course", description = "Models a university course.")
+@ApiModel(value = "Course", description = "Models a university course")
 @Entity
 @Table(name = "COURSE")
 public class Course {
@@ -34,22 +34,39 @@ public class Course {
     )
     private int id;
 
-    @ApiModelProperty(value = "Course code", required = true)
+    // Course code
+    @ApiModelProperty(value = "Course code", required = true, example = "COMPSCI 1JC3")
     @NotBlank
     @Column(name = "CODE")
     private String code;
 
-    @ApiModelProperty(value = "Program level", required = true)
+    // Course level, between 1 and 4
+    @ApiModelProperty(value = "Program level", required = true, example = "1")
     @Min(1)
     @Max(4)
     @Column(name = "LEVEL")
     private int level;
 
-    @ApiModelProperty(value = "School term")
-    @NotBlank
+    // School term
+    @ApiModelProperty(value = "School term", required = true, allowableValues = "FALL, WINTER, SPRING, SUMMER")
+    @Enumerated(EnumType.STRING)
+    @NotNull
     @Column(name = "TERM")
-    private String term;
+    private Term term;
 
+    // Academic year
+    @ApiModelProperty(value = "Academic year", required = true, example = "2020")
+    @NotNull
     @Column(name = "ACADEMIC_YEAR")
-    private int academicYear;
+    private Integer academicYear;
+}
+
+/**
+ * Academic semesters
+ */
+enum Term {
+    WINTER,
+    SPRING,
+    SUMMER,
+    FALL
 }
