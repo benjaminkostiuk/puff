@@ -8,9 +8,10 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
- * Models an attribute for a Course
+ * Models a key-value attribute for a Course
  */
 @Data
 @ApiModel(value = "CourseAttribute", description = "Attribute for a course")
