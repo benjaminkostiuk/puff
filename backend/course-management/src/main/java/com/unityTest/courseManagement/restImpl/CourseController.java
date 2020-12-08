@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Rest Controller for the /course endpoint
+ */
 @RestController
 public class CourseController implements CourseApi {
 
@@ -24,7 +27,7 @@ public class CourseController implements CourseApi {
 
     @Override
     public ResponseEntity<List<Course>> getCourses(Integer id, String code, Integer level, String term, Integer year) {
-        return ResponseEntity.ok().body(courseService.getCourses());
+        return ResponseEntity.ok().body(courseService.getCourses(id, code, level, term, year));
     }
 
     @Override
@@ -42,7 +45,7 @@ public class CourseController implements CourseApi {
 
     @Override
     public ResponseEntity<List<CourseAttribute>> getCourseAttrs(Integer courseId, Integer id, String name) {
-        return ResponseEntity.ok().body(courseService.getAttributesForCourse());
+        return ResponseEntity.ok().body(courseService.getCourseAttributes(id, courseId, name));
     }
 
     @Override
