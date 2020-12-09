@@ -1,5 +1,6 @@
 package com.unityTest.courseManagement.entity;
 
+import com.unityTest.courseManagement.models.Term;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -61,12 +62,3 @@ public class Course {
     private Integer academicYear;
 }
 
-/**
- * Academic semesters
- */
-enum Term {
-    WINTER,
-    SPRING,
-    SUMMER,
-    FALL
-}
