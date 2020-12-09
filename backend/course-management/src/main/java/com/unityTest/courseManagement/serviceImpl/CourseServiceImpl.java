@@ -2,11 +2,16 @@ package com.unityTest.courseManagement.serviceImpl;
 
 import com.unityTest.courseManagement.entity.Course;
 import com.unityTest.courseManagement.entity.CourseAttribute;
+import com.unityTest.courseManagement.entity.CourseAttribute_;
+import com.unityTest.courseManagement.entity.Course_;
+import com.unityTest.courseManagement.models.Term;
 import com.unityTest.courseManagement.exception.ElementNotFoundException;
 import com.unityTest.courseManagement.repository.CourseAttrRepository;
 import com.unityTest.courseManagement.repository.CourseRepository;
 import com.unityTest.courseManagement.service.CourseService;
+import com.unityTest.courseManagement.utils.specification.AndSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -43,8 +48,14 @@ public class CourseServiceImpl implements CourseService {
      * @return List of courses with fields matching the passed arguments
      */
     @Override
-    public List<Course> getCourses(Integer id, String code, Integer level, String term, Integer academicYear) {
-        return courseRepository.findAll();
+    public List<Course> getCourses(Integer id, String code, Integer level, Term term, Integer academicYear) {
+        Specification<Course> spec = new AndSpecification<Course>()
+                .equal(id, Course_.ID)
+                .equal(code, Course_.CODE)
+                .equal(level, Course_.LEVEL)
+                .equal(term, Course_.TERM)
+                .equal(academicYear, Course_.ACADEMIC_YEAR).getSpec();
+        return courseRepository.findAll(spec);
     }
 
     /**
@@ -89,7 +100,11 @@ public class CourseServiceImpl implements CourseService {
      */
     @Override
     public List<CourseAttribute> getCourseAttributes(Integer id, Integer courseId, String name) {
-        return courseAttrRepository.findAll();
+        Specification<CourseAttribute> spec = new AndSpecification<CourseAttribute>()
+                .equal(id, CourseAttribute_.ID)
+                .equal(courseId, CourseAttribute_.COURSE_ID)
+                .equal(name, CourseAttribute_.NAME).getSpec();
+        return courseAttrRepository.findAll(spec);
     }
 
     /**
