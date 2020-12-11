@@ -25,7 +25,7 @@ public interface CourseApi {
      */
     @ApiOperation(value = "Create or update a course", nickname = "createCourse", response = Course.class, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @PostMapping(value = "",  produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Course> createCourse(@ApiParam(value = "Course to create") @Valid @RequestBody Course course);
+    ResponseEntity<Course> createCourse(@ApiParam(value = "Course to create", required = true) @Valid @RequestBody Course course);
 
     /**
      * GET endpoint to retrieve courses
@@ -59,7 +59,7 @@ public interface CourseApi {
     @PostMapping(value = "/{courseId}/attr", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<CourseAttribute> createCourseAttr(
             @ApiParam(value = "Course id", required = true) @PathVariable(value = "courseId") Integer courseId,
-            @ApiParam("Course attribute to create") @Valid @RequestBody CourseAttribute courseAttr
+            @ApiParam(value = "Course attribute to create", required = true) @Valid @RequestBody CourseAttribute courseAttr
     );
 
     /**
