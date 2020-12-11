@@ -23,7 +23,7 @@ public interface CourseApi {
      * POST endpoint to create a Course
      * @return Created course
      */
-    @ApiOperation(value = "Create a course", nickname = "createCourse", response = Course.class, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Create or update a course", nickname = "createCourse", response = Course.class, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @PostMapping(value = "",  produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Course> createCourse(@ApiParam(value = "Course to create") @Valid @RequestBody Course course);
 
@@ -36,11 +36,11 @@ public interface CourseApi {
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Page<Course>> getCourses(
             Pageable pageable,
-            @ApiParam("course id") @RequestParam(value = "id", required = false) Integer id,
-            @ApiParam("course code") @RequestParam(value = "code", required = false) String code,
-            @ApiParam("course level") @RequestParam(value = "level", required = false) Integer level,
-            @ApiParam("course term") @RequestParam(value = "term", required = false) String term,
-            @ApiParam("course academic year") @RequestParam(value = "academicYear", required = false) Integer academicYear
+            @ApiParam("Course id") @RequestParam(value = "id", required = false) Integer id,
+            @ApiParam("Course code") @RequestParam(value = "code", required = false) String code,
+            @ApiParam("Course level") @RequestParam(value = "level", required = false) Integer level,
+            @ApiParam("Course term") @RequestParam(value = "term", required = false) String term,
+            @ApiParam("Course academic year") @RequestParam(value = "academicYear", required = false) Integer academicYear
     );
 
     /**
@@ -49,17 +49,17 @@ public interface CourseApi {
      */
     @ApiOperation(value = "Delete a course", nickname = "deleteCourse")
     @DeleteMapping(value = "/{courseId}")
-    void deleteCourse(@ApiParam(value = "course id", required = true) @PathVariable(value = "courseId") Integer courseId);
+    void deleteCourse(@ApiParam(value = "Course id", required = true) @PathVariable(value = "courseId") Integer courseId);
 
     /**
      * POST endpoint to create an attribute for a course
      * @return Create course attribute
      */
-    @ApiOperation(value = "Create a course attribute", nickname = "createCourseAttr", response = CourseAttribute.class, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Create or update a course attribute", nickname = "createCourseAttr", response = CourseAttribute.class, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @PostMapping(value = "/{courseId}/attr", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<CourseAttribute> createCourseAttr(
-            @ApiParam(value = "course id", required = true) @PathVariable(value = "courseId") Integer courseId,
-            @ApiParam("course attribute to create") @Valid @RequestBody CourseAttribute courseAttr
+            @ApiParam(value = "Course id", required = true) @PathVariable(value = "courseId") Integer courseId,
+            @ApiParam("Course attribute to create") @Valid @RequestBody CourseAttribute courseAttr
     );
 
     /**
@@ -71,8 +71,8 @@ public interface CourseApi {
     ResponseEntity<Page<CourseAttribute>> getCourseAttrs(
             Pageable pageable,
             @ApiParam(value = "course id", required = true) @PathVariable(value = "courseId") Integer courseId,
-            @ApiParam("attribute id") @RequestParam(value = "id", required = false) Integer id,
-            @ApiParam("attribute name") @RequestParam(value = "name", required = false) String name
+            @ApiParam("Attribute id") @RequestParam(value = "id", required = false) Integer id,
+            @ApiParam("Attribute name") @RequestParam(value = "name", required = false) String name
     );
 
     /**
@@ -81,5 +81,5 @@ public interface CourseApi {
      */
     @ApiOperation(value = "Delete a course attribute", nickname = "deleteCourseAttr")
     @DeleteMapping(value = "/attr/{attributeId}")
-    void deleteCourseAttr(@ApiParam(value = "course attribute id", required = true) @PathVariable(value = "attributeId") Integer attributeId);
+    void deleteCourseAttr(@ApiParam(value = "Course attribute id", required = true) @PathVariable(value = "attributeId") Integer attributeId);
 }
