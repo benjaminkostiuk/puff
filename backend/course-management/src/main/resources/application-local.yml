@@ -14,6 +14,7 @@ spring:
     driverClassName: org.h2.Driver
     initialization-mode: always
     schema: classpath*:/db/h2/bootstrap_schema.sql
+    data: classpath*:/db/h2/bootstrap_data.sql
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:

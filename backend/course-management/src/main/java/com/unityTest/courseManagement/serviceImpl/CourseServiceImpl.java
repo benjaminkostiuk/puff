@@ -11,6 +11,8 @@ import com.unityTest.courseManagement.repository.CourseRepository;
 import com.unityTest.courseManagement.service.CourseService;
 import com.unityTest.courseManagement.utils.specification.AndSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -49,13 +51,29 @@ public class CourseServiceImpl implements CourseService {
      */
     @Override
     public List<Course> getCourses(Integer id, String code, Integer level, Term term, Integer academicYear) {
+        Page<Course> results = getCourses(Pageable.unpaged(), id, code, level, term, academicYear);
+        return results.getContent();
+    }
+
+    /**
+     * Get a Page view of courses that match the passed arguments
+     * @param pageable Pageable object specifying page size, sort and index
+     * @param id Id of course to fetch
+     * @param code Course code to match
+     * @param level Course level to match
+     * @param term Course term to match
+     * @param academicYear Course academic year to match
+     * @return Page view of courses from repository matching passed arguments and formatted using the pageable param
+     */
+    @Override
+    public Page<Course> getCourses(Pageable pageable, Integer id, String code, Integer level, Term term, Integer academicYear) {
         Specification<Course> spec = new AndSpecification<Course>()
                 .equal(id, Course_.ID)
                 .equal(code, Course_.CODE)
                 .equal(level, Course_.LEVEL)
                 .equal(term, Course_.TERM)
                 .equal(academicYear, Course_.ACADEMIC_YEAR).getSpec();
-        return courseRepository.findAll(spec);
+        return courseRepository.findAll(spec, pageable);
     }
 
     /**
@@ -93,18 +111,32 @@ public class CourseServiceImpl implements CourseService {
 
     /**
      * Get a list of course attributes that match the passed arguments
-     * @param id Id of courseAttribute to find
+     * @param id Id of CourseAttribute to find
      * @param courseId CourseAttribute courseId to match
      * @param name CourseAttribute name to match
-     * @return List of CourseAttributes with fields matching the passed arguments
+     * @return List of course attributes with fields matching the passed arguments
      */
     @Override
     public List<CourseAttribute> getCourseAttributes(Integer id, Integer courseId, String name) {
+        Page<CourseAttribute> results = getCourseAttributes(Pageable.unpaged(), id, courseId, name);
+        return results.getContent();
+    }
+
+    /**
+     * Get a Page view of course attributes that match the passed arguments
+     * @param pageable Pageable object specifying page size, sort and index
+     * @param id Id of CourseAttribute to find
+     * @param courseId CourseAttribute courseId to match
+     * @param name CourseAttribute name to match
+     * @return Page view of course attributes from repository matching passed arguments and formatted using the pageable param
+     */
+    @Override
+    public Page<CourseAttribute> getCourseAttributes(Pageable pageable, Integer id, Integer courseId, String name) {
         Specification<CourseAttribute> spec = new AndSpecification<CourseAttribute>()
                 .equal(id, CourseAttribute_.ID)
                 .equal(courseId, CourseAttribute_.COURSE_ID)
                 .equal(name, CourseAttribute_.NAME).getSpec();
-        return courseAttrRepository.findAll(spec);
+        return courseAttrRepository.findAll(spec, pageable);
     }
 
     /**

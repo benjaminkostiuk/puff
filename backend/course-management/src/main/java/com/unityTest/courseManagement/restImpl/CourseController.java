@@ -7,6 +7,8 @@ import com.unityTest.courseManagement.restApi.CourseApi;
 import com.unityTest.courseManagement.service.CourseService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +30,7 @@ public class CourseController implements CourseApi {
     }
 
     @Override
-    public ResponseEntity<List<Course>> getCourses(Integer id, String code, Integer level, String term, Integer year) {
+    public ResponseEntity<Page<Course>> getCourses(Pageable pageable, Integer id, String code, Integer level, String term, Integer academicYear) {
         // Convert term to Enum before searching
         Term termEnum = null;
         if(term != null) {
@@ -36,7 +38,7 @@ public class CourseController implements CourseApi {
             catch(IllegalArgumentException e) { throw new HttpMessageNotReadableException("Not one of accepted values"); }
         }
         // Retrieve results using service
-        return ResponseEntity.ok().body(courseService.getCourses(id, code, level, termEnum, year));
+        return ResponseEntity.ok().body(courseService.getCourses(pageable, id, code, level, termEnum, academicYear));
     }
 
     @Override
@@ -53,8 +55,8 @@ public class CourseController implements CourseApi {
     }
 
     @Override
-    public ResponseEntity<List<CourseAttribute>> getCourseAttrs(Integer courseId, Integer id, String name) {
-        return ResponseEntity.ok().body(courseService.getCourseAttributes(id, courseId, name));
+    public ResponseEntity<Page<CourseAttribute>> getCourseAttrs(Pageable pageable, Integer courseId, Integer id, String name) {
+        return ResponseEntity.ok().body(courseService.getCourseAttributes(pageable, id, courseId, name));
     }
 
     @Override

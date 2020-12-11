@@ -5,6 +5,8 @@ import com.unityTest.courseManagement.entity.CourseAttribute;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -32,12 +34,13 @@ public interface CourseApi {
      */
     @ApiOperation(value = "Retrieve a list of courses", nickname = "getCourses", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<List<Course>> getCourses(
+    ResponseEntity<Page<Course>> getCourses(
+            Pageable pageable,
             @ApiParam("course id") @RequestParam(value = "id", required = false) Integer id,
             @ApiParam("course code") @RequestParam(value = "code", required = false) String code,
             @ApiParam("course level") @RequestParam(value = "level", required = false) Integer level,
             @ApiParam("course term") @RequestParam(value = "term", required = false) String term,
-            @ApiParam("course academic year") @RequestParam(value = "year", required = false) Integer year
+            @ApiParam("course academic year") @RequestParam(value = "academicYear", required = false) Integer academicYear
     );
 
     /**
@@ -65,7 +68,8 @@ public interface CourseApi {
      */
     @ApiOperation(value = "Get attributes for a course", nickname = "getCourseAttrs", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
     @GetMapping(value = "/{courseId}/attr", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<List<CourseAttribute>> getCourseAttrs(
+    ResponseEntity<Page<CourseAttribute>> getCourseAttrs(
+            Pageable pageable,
             @ApiParam(value = "course id", required = true) @PathVariable(value = "courseId") Integer courseId,
             @ApiParam("attribute id") @RequestParam(value = "id", required = false) Integer id,
             @ApiParam("attribute name") @RequestParam(value = "name", required = false) String name
