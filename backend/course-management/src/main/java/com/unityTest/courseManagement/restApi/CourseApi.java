@@ -2,10 +2,9 @@ package com.unityTest.courseManagement.restApi;
 
 import com.unityTest.courseManagement.entity.Course;
 import com.unityTest.courseManagement.entity.CourseAttribute;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import org.springframework.data.domain.Page;
+import com.unityTest.courseManagement.models.CourseAttributePage;
+import com.unityTest.courseManagement.models.CoursePage;
+import io.swagger.annotations.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +23,7 @@ public interface CourseApi {
      * @return Created course
      */
     @ApiOperation(value = "Create or update a course", nickname = "createCourse", response = Course.class, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ApiResponse(code = 201, message = "Resource Created", response = Course.class)
     @PostMapping(value = "",  produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Course> createCourse(@ApiParam(value = "Course to create", required = true) @Valid @RequestBody Course course);
 
@@ -32,9 +32,9 @@ public interface CourseApi {
      * Filter by id, code, level, term and academic year
      * @return List of Course objects matching criterion
      */
-    @ApiOperation(value = "Retrieve a list of courses", nickname = "getCourses", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Retrieve a list of courses", nickname = "getCourses", response = CoursePage.class, produces = MediaType.APPLICATION_JSON_VALUE)
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Page<Course>> getCourses(
+    ResponseEntity<CoursePage> getCourses(
             Pageable pageable,
             @ApiParam("Course id") @RequestParam(value = "id", required = false) Integer id,
             @ApiParam("Course code") @RequestParam(value = "code", required = false) String code,
@@ -56,6 +56,7 @@ public interface CourseApi {
      * @return Create course attribute
      */
     @ApiOperation(value = "Create or update a course attribute", nickname = "createCourseAttr", response = CourseAttribute.class, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ApiResponse(code = 201, message = "Resource Created", response = CourseAttribute.class)
     @PostMapping(value = "/{courseId}/attr", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<CourseAttribute> createCourseAttr(
             @ApiParam(value = "Course id", required = true) @PathVariable(value = "courseId") Integer courseId,
@@ -66,9 +67,9 @@ public interface CourseApi {
      * GET endpoint to retrieve attributes for a course
      * @return List of attributes for a course
      */
-    @ApiOperation(value = "Get attributes for a course", nickname = "getCourseAttrs", response = List.class, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Get attributes for a course", nickname = "getCourseAttrs", response = CourseAttributePage.class, produces = MediaType.APPLICATION_JSON_VALUE)
     @GetMapping(value = "/{courseId}/attr", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Page<CourseAttribute>> getCourseAttrs(
+    ResponseEntity<CourseAttributePage> getCourseAttrs(
             Pageable pageable,
             @ApiParam(value = "course id", required = true) @PathVariable(value = "courseId") Integer courseId,
             @ApiParam("Attribute id") @RequestParam(value = "id", required = false) Integer id,
