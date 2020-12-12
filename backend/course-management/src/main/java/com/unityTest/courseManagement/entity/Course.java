@@ -3,7 +3,9 @@ package com.unityTest.courseManagement.entity;
 import com.unityTest.courseManagement.models.Term;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -16,6 +18,8 @@ import javax.validation.constraints.NotNull;
  * Models a university course for a given semester
  */
 @Data
+@RequiredArgsConstructor
+@AllArgsConstructor
 @ApiModel(value = "Course", description = "Models a university course")
 @Entity
 @Table(name = "COURSE")

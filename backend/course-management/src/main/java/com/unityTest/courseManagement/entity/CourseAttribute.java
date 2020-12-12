@@ -3,7 +3,9 @@ package com.unityTest.courseManagement.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -14,6 +16,8 @@ import javax.validation.constraints.NotNull;
  * Models a key-value attribute for a Course
  */
 @Data
+@RequiredArgsConstructor
+@AllArgsConstructor
 @ApiModel(value = "CourseAttribute", description = "Attribute for a course")
 @Entity
 @Table(name = "COURSE_ATTR")
