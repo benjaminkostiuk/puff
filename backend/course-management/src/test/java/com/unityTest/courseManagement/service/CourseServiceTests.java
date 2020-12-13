@@ -35,7 +35,7 @@ import static org.mockito.Mockito.when;
  * Implements unit tests for CourseService
  */
 @ExtendWith(MockitoExtension.class)
-class TestCourseService {
+class CourseServiceTests {
 
     @Mock
     private CourseRepository courseRepository;
@@ -74,13 +74,13 @@ class TestCourseService {
     }
 
     @Test
-    void testCreateCourse() {
+    void createCourse() {
         when(this.courseRepository.save(any(Course.class))).then(returnsFirstArg());
         assertEquals(course, courseService.createCourse(course));
     }
 
     @Test
-    void testGetCourses() {
+    void getCourses() {
         Page<Course> page = new PageImpl<>(courseList);
         when(this.courseRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
         assertEquals(courseList, courseService.getCourses(1, "COMPSCI 1JC3", 1, Term.WINTER, 2000));
@@ -90,7 +90,7 @@ class TestCourseService {
      * Test element not found for GetCourseById
      */
     @Test
-    void testGetCourseByIdElementNotFound() {
+    void getCourseById_ElementNotFound() {
         assertThrows(ElementNotFoundException.class, () -> {
             when(this.courseRepository.findById(1)).thenReturn(Optional.empty());  // Set repository to not find element
             courseService.getCourseById(1);
@@ -98,31 +98,31 @@ class TestCourseService {
     }
 
     @Test
-    void testGetCourseById() {
+    void getCourseById() {
         when(this.courseRepository.findById(1)).thenReturn(Optional.of(course));
         assertEquals(course, courseService.getCourseById(1));
     }
 
     @Test
-    void testDeleteCourse() {
+    void deleteCourse() {
         courseService.deleteCourse(1);
     }
 
     @Test
-    void testCreateCourseAttr() {
+    void createCourseAttr() {
         when(this.courseAttrRepository.save(any(CourseAttribute.class))).then(returnsFirstArg());
         assertEquals(courseAttribute, courseService.createCourseAttr(courseAttribute));
     }
 
     @Test
-    void testGetCourseAttributes() {
+    void getCourseAttributes() {
         Page<CourseAttribute> page = new PageImpl<>(courseAttributeList);
         when(this.courseAttrRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
         assertEquals(courseAttributeList, courseService.getCourseAttributes(1, 1, "TEST_NAME"));
     }
 
     @Test
-    void testDeleteCourseAttr() {
+    void deleteCourseAttr() {
         courseService.deleteCourseAttr(1);
     }
 }
