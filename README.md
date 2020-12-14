@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="./puff_logo.png" height="200"/>
+  <img src="./logo.png" height="200"/>
   <br>
   Puff
 </h1>
