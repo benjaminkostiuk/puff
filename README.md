@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://www.oracle.com/ca-en/java/technologies/javase/javase-jdk8-downloads.html" rel="nofollow"><img src="https://img.shields.io/badge/java-1.8-009ACD?style=flat-square&logo=Java" alt="java version" data-canonical-src="https://img.shields.io/badge/java-1.8-f39f37?style=flat-square&logo=Java" style="max-width:100%;"></a>
-  <a href="https://spring.io/projects/spring-boot" rel="nofollow"><img src="https://img.shields.io/badge/spring--boot-v3.2.0-6db33f?style=flat-square&logo=Spring" alt="spring boot version" data-canonical-src="https://img.shields.io/badge/spring--boot-v3.2.0-6db33f?style=flat-square&logo=Spring" style="max-width:100%;"></a>
+  <a href="https://spring.io/projects/spring-boot" rel="nofollow"><img src="https://img.shields.io/badge/spring--boot-3.2.0-6db33f?style=flat-square&logo=Spring" alt="spring boot version" data-canonical-src="https://img.shields.io/badge/spring--boot-3.2.0-6db33f?style=flat-square&logo=Spring" style="max-width:100%;"></a>
   <a href="https://swagger.io" rel="nofollow"><img src="https://img.shields.io/badge/swagger-2.0-6c9a00?style=flat-square&logo=Swagger" alt="swagger version" data-canonical-src="https://img.shields.io/badge/swagger-2.0-6c9a00?style=flat-square&logo=Swagger" style="max-width:100%;"></a>
 </p>
 
@@ -75,7 +75,7 @@ Once you have a microservice running (See [run the backend](#run-the-backend)) v
 * Test-runner: TBD
 * User-management: TBD
 
-A `json` api version to be consumed and used to generate client libraries can be accessed at http://localhost:**XXXX**/v2/api-docs. 
+A `json` api version to be consumed and used to generate client libraries can be accessed at http://localhost:XXXX/v2/api-docs. 
 
 ### H2 Database
 _Puff_'s Spring-boot backend uses a H2 runtime database to simulate a database connection for local development. Once the project is running it can be accessed at 
