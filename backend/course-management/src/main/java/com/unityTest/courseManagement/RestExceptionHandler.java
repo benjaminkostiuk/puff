@@ -1,5 +1,6 @@
 package com.unityTest.courseManagement;
 
+import com.unityTest.courseManagement.constants.ExceptionMsg;
 import com.unityTest.courseManagement.exception.ElementNotFoundException;
 import com.unityTest.courseManagement.models.error.ApiError;
 import org.springframework.core.Ordered;
@@ -45,7 +46,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
             HttpHeaders headers,
             HttpStatus status,
             WebRequest request) {
-        String message = ex.getParameterName() + " required parameter is missing";
+        String message = ExceptionMsg.MISSING_REQUEST_PARAMETER(ex.getParameterName());
         return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, message, ex, request));
     }
 
@@ -64,11 +65,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
             HttpHeaders headers,
             HttpStatus status,
             WebRequest request) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(ex.getContentType());
-        builder.append(" media type is not supported. Supported media types are ");
-        ex.getSupportedMediaTypes().forEach(t -> builder.append(t).append(", "));
-        return buildResponseEntity(new ApiError(HttpStatus.UNSUPPORTED_MEDIA_TYPE, builder.substring(0, builder.length() - 2), ex, request));
+        String message = ExceptionMsg.HTTP_MEDIA_TYPE_NOT_SUPPORTED(ex.getContentType(), ex.getSupportedMediaTypes());
+        return buildResponseEntity(new ApiError(HttpStatus.UNSUPPORTED_MEDIA_TYPE, message, ex, request));
     }
 
     /**
@@ -92,7 +90,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         builder.append(" method is not supported for path. Supported methods are ");
         ex.getSupportedHttpMethods().forEach(m -> builder.append(m.toString()).append(", "));
         // Create ApiError object to return as response
-        ApiError error = new ApiError(HttpStatus.METHOD_NOT_ALLOWED, ex.getLocalizedMessage(), ex, request);
+        ApiError error = new ApiError(HttpStatus.METHOD_NOT_ALLOWED, ExceptionMsg.HTTP_REQUEST_METHOD_NOT_SUPPORTED(ex.getMethod()), ex, request);
         error.setDebugMessage(builder.substring(0, builder.length() - 2));
         return buildResponseEntity(error);
     }
@@ -112,7 +110,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
             HttpHeaders headers,
             HttpStatus status,
             WebRequest request) {
-        return buildResponseEntity(new ApiError(HttpStatus.NOT_FOUND, "No handler found for path", ex, request));
+        return buildResponseEntity(new ApiError(HttpStatus.NOT_FOUND, ExceptionMsg.NO_HANDLER_FOUND, ex, request));
     }
 
     /**
@@ -130,7 +128,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
             HttpHeaders headers,
             HttpStatus status,
             WebRequest request) {
-        return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, "Malformed JSON request", ex, request));
+        return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, ExceptionMsg.MALFORMED_JSON_REQUEST, ex, request));
     }
 
     /**
@@ -148,7 +146,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
             HttpHeaders headers,
             HttpStatus status,
             WebRequest request) {
-        ApiError error = new ApiError(HttpStatus.BAD_REQUEST, "Validation error", ex, request);
+        ApiError error = new ApiError(HttpStatus.BAD_REQUEST, ExceptionMsg.METHOD_ARGUMENT_NOT_VALID, ex, request);
         error.setDebugMessage("Validation failed for argument");
         // Add all field errors
         ex.getBindingResult().getFieldErrors().forEach(error::addValidationError);
@@ -172,7 +170,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
             HttpHeaders headers,
             HttpStatus status,
             WebRequest request) {
-        ApiError error = new ApiError(HttpStatus.BAD_REQUEST, "Validation error", ex, request);
+        ApiError error = new ApiError(HttpStatus.BAD_REQUEST, ExceptionMsg.CONSTRAINT_VALIDATION, ex, request);
         error.setDebugMessage("Validation failed for argument");
         // Add all constraint violation errors
         ex.getConstraintViolations().forEach(error::addValidationError);
@@ -190,7 +188,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleElementNotFound(
             ElementNotFoundException ex,
             HttpServletRequest request) {
-        ApiError error = new ApiError(HttpStatus.NOT_FOUND, "Element not found", ex, request);
+        ApiError error = new ApiError(HttpStatus.NOT_FOUND, ExceptionMsg.ELEMENT_NOT_FOUND, ex, request);
         return buildResponseEntity(error);
     }
 
@@ -208,7 +206,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
             HttpServletRequest request) {
         if(ex.getCause() instanceof javax.validation.ConstraintViolationException
             || ex.getCause() instanceof org.hibernate.exception.ConstraintViolationException) {
-            return buildResponseEntity(new ApiError(HttpStatus.CONFLICT, "Database conflict", ex, request));
+            return buildResponseEntity(new ApiError(HttpStatus.CONFLICT, ExceptionMsg.DATABASE_CONFLICT, ex, request));
         }
         return buildResponseEntity(new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, ex.getLocalizedMessage(), ex.getCause(), request));
     }
@@ -224,7 +222,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handlePropertyReferenceException(
             PropertyReferenceException ex,
             HttpServletRequest request) {
-        ApiError error = new ApiError(HttpStatus.NOT_FOUND, "Property does not exist", ex, request);
+        ApiError error = new ApiError(HttpStatus.NOT_FOUND, ExceptionMsg.PROPERTY_REFERENCE, ex, request);
         return buildResponseEntity(error);
     }
 
@@ -240,7 +238,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleEmptyResultDataAccess(
             EmptyResultDataAccessException ex,
             HttpServletRequest request) {
-        ApiError error = new ApiError(HttpStatus.NOT_FOUND, "Element does not exist", ex, request);
+        ApiError error = new ApiError(HttpStatus.NOT_FOUND, ExceptionMsg.EMPTY_RESULT_DATA_ACCESS, ex, request);
         return buildResponseEntity(error);
     }
 
