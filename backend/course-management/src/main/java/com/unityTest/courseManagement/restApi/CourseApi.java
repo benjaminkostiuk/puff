@@ -13,12 +13,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @Api(value = "Course Management API", tags = "Course API", description = "Manage course resources")
 @Validated
 @RequestMapping(value = "/course")
-public interface CourseApi {
+public interface CourseApi extends BaseApi {
     /**
      * POST endpoint to create a Course
      * @return Created course
