@@ -59,7 +59,7 @@ bin/standalone.sh -Djboss.socket.binding.port-offset=100
 ```
 * Setup your admin account by navigating to http://localhost:8180.
 * Navigate to the admin portal from http://localhost:8180/auth/admin
-* Import the realm settings, configuration and clients using the [puff.json](security/puff-keycloak-config.json) file located in the security folder.
+* Import the realm settings, configuration and clients using the [puff-keycloak-config.json](security/puff-keycloak-config.json) file located in the security folder.
 
 #### Setup test account
 * Create two test user accounts and add one each to the `Users` and `Administrators` groups.
@@ -99,7 +99,9 @@ Once you have a microservice running (See [run the backend](#run-the-backend)) v
 * Test-runner: TBD
 * User-management: TBD
 
-A `json` api version to be consumed and used to generate client libraries can be accessed at http://localhost:XXXX/v2/api-docs. 
+A `json` api version to be consumed and used to generate client libraries can be accessed at http://localhost:XXXX/v2/api-docs.
+
+Select `Authorize` and login with a test user account to try out any of the endpoints.
 
 ### H2 Database
 _Puff_'s Spring-boot backend uses a H2 runtime database to simulate a database connection for local development. Once the project is running it can be accessed at 
