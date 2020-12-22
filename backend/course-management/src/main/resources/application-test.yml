@@ -25,7 +25,19 @@ spring:
       show_sql: false
     show-sql: false
 
+keycloak:
+  realm: puff
+  auth-server-url: http://localhost:8180/auth
+  ssl-required: external
+  resource: course-management
+  principal-attribute: preferred_username
+  bearer-only: true
+
 swagger:
+  auth:
+    token-url: test
+    client-id: test
+    client-secret: test
   api:
     title: Course Management REST Api
     description: Course Management REST Api documentation and management
@@ -37,18 +49,3 @@ swagger:
       name: MIT License
       url: https://opensource.org/licenses/MIT
     version: 0.0.1
-
-#management:
-#  server:
-#    port: 8080
-#    address: 127.0.0.1
-#
-#keycloak:
-#  realm: library-test
-#  auth-server-url: http://localhost:8180/auth
-#  ssl-required: external
-#  resource: springboot-microservice
-#  credentials:
-#    secret: ${CM_KEYCLOAK_SECRET}
-#  principal-attribute: preferred_username
-#  bearer-only: true
