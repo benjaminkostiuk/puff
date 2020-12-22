@@ -24,11 +24,23 @@ public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
-        http.authorizeRequests()
-                .antMatchers("/class").hasAnyRole("MEMBER")
-                .mvcMatchers("/h2/**").permitAll()      // Allow h2
-            .anyRequest().permitAll();
         http.csrf().disable().headers().frameOptions().disable();
+        http.authorizeRequests()
+                // Permit all swagger links
+                .antMatchers("/v2/api-docs",
+                        "/configuration/ui",
+                        "/swagger-resources/**",
+                        "/configuration/security",
+                        "/swagger-ui.html",
+                        "/webjars/**").permitAll()
+                // Allow h2
+                .antMatchers("/h2/**").permitAll()
+                // Allow actuator endpoints
+                .antMatchers("/actuator/health").permitAll()
+                .antMatchers("/actuator/info").permitAll()
+                // Authorize all other requests
+                .mvcMatchers("/**").hasRole("USER")
+                .anyRequest().authenticated();
     }
 
     @Autowired

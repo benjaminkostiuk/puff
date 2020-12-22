@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
+
 /**
  * Rest Controller for the /course endpoint
  */
@@ -25,6 +27,7 @@ public class CourseController implements CourseApi {
     private CourseService courseService;
 
     @Override
+    @RolesAllowed("ROLE_ADMIN")
     public ResponseEntity<Course> createCourse(Course course) {
         return new ResponseEntity<>(courseService.createCourse(course), HttpStatus.CREATED);
     }
@@ -43,11 +46,13 @@ public class CourseController implements CourseApi {
     }
 
     @Override
+    @RolesAllowed("ROLE_ADMIN")
     public void deleteCourse(Integer courseId) {
         courseService.deleteCourse(courseId);
     }
 
     @Override
+    @RolesAllowed("ROLE_ADMIN")
     public ResponseEntity<CourseAttribute> createCourseAttr(Integer courseId, CourseAttribute courseAttr) {
         // Find and and set course id for attribute
         Course course = courseService.getCourseById(courseId);
@@ -62,6 +67,7 @@ public class CourseController implements CourseApi {
     }
 
     @Override
+    @RolesAllowed("ROLE_ADMIN")
     public void deleteCourseAttr(Integer attributeId) {
         courseService.deleteCourseAttr(attributeId);
     }
