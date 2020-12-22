@@ -1,6 +1,7 @@
 package com.unityTest.courseManagement.configuration;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.unityTest.courseManagement.utils.AnnotationProxy;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,10 +13,11 @@ import org.springframework.data.domain.Pageable;
 import springfox.documentation.builders.*;
 import springfox.documentation.schema.AlternateTypeRule;
 import springfox.documentation.schema.AlternateTypeRuleConvention;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Contact;
+import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger.web.SecurityConfiguration;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.lang.reflect.Type;
@@ -51,6 +53,18 @@ public class Swagger2Config {
     @Value("${swagger.api.version}")
     private String version;
 
+    @Value("${keycloak.realm}")
+    private String realm;
+
+    @Value("${swagger.auth.token-url}")
+    private String authTokenUrl;
+
+    @Value("${swagger.auth.client-secret}")
+    private String authClientSecret;
+
+    @Value("${swagger.auth.client-id}")
+    private String authClientId;
+
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
@@ -59,7 +73,26 @@ public class Swagger2Config {
                     .basePackage("com.unityTest.courseManagement.restImpl"))
                 .paths(PathSelectors.regex("/.*"))
                 .build()
-                .apiInfo(apiEndPointsInfo());
+                .apiInfo(apiEndPointsInfo())
+                .securityContexts(Lists.newArrayList(securityContext()))
+                .securitySchemes(Lists.newArrayList(securitySchema()));
+    }
+
+    @Bean
+    public SecurityConfiguration securityConfiguration() {
+        return new SecurityConfiguration(authClientId, authClientSecret, realm, "", "", Collections.emptyMap(), false);
+    }
+
+    private OAuth securitySchema() {
+        List<GrantType> grantTypes = Lists.newArrayList(new ResourceOwnerPasswordCredentialsGrant(authTokenUrl));
+        return new OAuth("oauth2", Collections.EMPTY_LIST, grantTypes);
+    }
+
+    private SecurityContext securityContext() {
+        return SecurityContext.builder()
+                .securityReferences(Lists.newArrayList(new SecurityReference("oauth2", new AuthorizationScope[0])))
+                .forPaths(PathSelectors.regex("/.*"))
+                .build();
     }
 
     private ApiInfo apiEndPointsInfo() {

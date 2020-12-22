@@ -48,8 +48,32 @@ _Puff_ uses [Maven](https://maven.apache.org/) as its build tool for its backend
 * Verify your installation with `mvn -v`
 
 ### Setup Keycloak
-TBD
+> Keycloak is an open source Identity and Access Management solution aimed at modern applications and services. It makes it easy to secure applications and services with little to no code.
 
+_Puff_ uses keycloak as a user management and authentication solution. More information about Keycloak can be found on their [offical docs page](https://www.keycloak.org/docs/latest/index.html).
+
+* Download and install the standalone server from https://www.keycloak.org/downloads.html.
+* Navigate to your installed keycloak directory and run
+```shell
+bin/standalone.sh -Djboss.socket.binding.port-offset=100
+```
+* Setup your admin account by navigating to http://localhost:8180.
+* Navigate to the admin portal from http://localhost:8180/auth/admin
+* Import the realm settings, configuration and clients using the [puff-keycloak-config.json](security/puff-keycloak-config.json) file located in the security folder.
+
+#### Setup test account
+* Create two test user accounts and add one each to the `Users` and `Administrators` groups.
+* View the test account page at http://localhost:8180/auth/realms/puff/account/.
+* Access a authentication token by making the following curl call
+```shell
+curl -X POST 'http://localhost:8180/auth/realms/puff/protocol/openid-connect/token' \
+ --header 'Content-Type: application/x-www-form-urlencoded' \
+ --data-urlencode 'grant_type=password' \
+ --data-urlencode 'client_id=user-auth' \
+ --data-urlencode 'client_secret=USER_AUTH_CLIENT_SECRET' \
+ --data-urlencode 'username=TEST_USER_USERNAME' \
+ --data-urlencode 'password=TEST_USER_PASSWORD'
+```
 ### Run the backend
 _Puff_ has 3 microservices that make up its backend:
 * **course-management** manages courses, assignments and user actions
@@ -75,7 +99,9 @@ Once you have a microservice running (See [run the backend](#run-the-backend)) v
 * Test-runner: TBD
 * User-management: TBD
 
-A `json` api version to be consumed and used to generate client libraries can be accessed at http://localhost:XXXX/v2/api-docs. 
+A `json` api version to be consumed and used to generate client libraries can be accessed at http://localhost:XXXX/v2/api-docs.
+
+Select `Authorize` and login with a test user account to try out any of the endpoints.
 
 ### H2 Database
 _Puff_'s Spring-boot backend uses a H2 runtime database to simulate a database connection for local development. Once the project is running it can be accessed at 

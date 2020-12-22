@@ -28,6 +28,10 @@ spring:
     show-sql: true
 
 swagger:
+  auth:
+    token-url: http://localhost:8180/auth/realms/puff/protocol/openid-connect/token
+    client-id: user-auth
+    client-secret: f80e13fa-5e3f-4078-939f-4e2d084c38da   # Replace with client id for user-auth
   api:
     title: Course Management REST Api
     description: Course Management REST Api documentation and management
@@ -44,13 +48,16 @@ management:
   server:
     port: 8080
     address: 127.0.0.1
+  endpoints:
+    enabled-by-default: false
+  endpoint:
+    health.enabled: true
+    info.enabled: true
 
 keycloak:
-  realm: library-test
+  realm: puff
   auth-server-url: http://localhost:8180/auth
   ssl-required: external
-  resource: springboot-microservice
-  credentials:
-    secret: ${CM_KEYCLOAK_SECRET}
+  resource: course-management
   principal-attribute: preferred_username
   bearer-only: true
