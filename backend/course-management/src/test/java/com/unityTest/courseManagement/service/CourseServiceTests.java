@@ -74,13 +74,13 @@ class CourseServiceTests {
     }
 
     @Test
-    void createCourse() {
+    void createCourse_Valid_ReturnCreatedCourse() {
         when(this.courseRepository.save(any(Course.class))).then(returnsFirstArg());
         assertEquals(course, courseService.createCourse(course));
     }
 
     @Test
-    void getCourses() {
+    void getCourses_Valid_ReturnCourseList() {
         Page<Course> page = new PageImpl<>(courseList);
         when(this.courseRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
         assertEquals(courseList, courseService.getCourses(1, "COMPSCI 1JC3", 1, Term.WINTER, 2000));
@@ -90,7 +90,7 @@ class CourseServiceTests {
      * Test element not found for GetCourseById
      */
     @Test
-    void getCourseById_ElementNotFound() {
+    void getCourseById_CourseNotFound_ElementNotFoundException() {
         assertThrows(ElementNotFoundException.class, () -> {
             when(this.courseRepository.findById(1)).thenReturn(Optional.empty());  // Set repository to not find element
             courseService.getCourseById(1);
@@ -98,31 +98,31 @@ class CourseServiceTests {
     }
 
     @Test
-    void getCourseById() {
+    void getCourseById_CourseFound_ReturnCourse() {
         when(this.courseRepository.findById(1)).thenReturn(Optional.of(course));
         assertEquals(course, courseService.getCourseById(1));
     }
 
     @Test
-    void deleteCourse() {
+    void deleteCourse_Valid_DeleteCourse() {
         courseService.deleteCourse(1);
     }
 
     @Test
-    void createCourseAttr() {
+    void createCourseAttr_Valid_ReturnCourseAttributeCreated() {
         when(this.courseAttrRepository.save(any(CourseAttribute.class))).then(returnsFirstArg());
         assertEquals(courseAttribute, courseService.createCourseAttr(courseAttribute));
     }
 
     @Test
-    void getCourseAttributes() {
+    void getCourseAttributes_Valid_ReturnCourseAttributeList() {
         Page<CourseAttribute> page = new PageImpl<>(courseAttributeList);
         when(this.courseAttrRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
         assertEquals(courseAttributeList, courseService.getCourseAttributes(1, 1, "TEST_NAME"));
     }
 
     @Test
-    void deleteCourseAttr() {
+    void deleteCourseAttr_Valid_DeleteCourseAttribute() {
         courseService.deleteCourseAttr(1);
     }
 }

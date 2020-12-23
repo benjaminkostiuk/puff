@@ -238,7 +238,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleEmptyResultDataAccess(
             EmptyResultDataAccessException ex,
             HttpServletRequest request) {
-        ApiError error = new ApiError(HttpStatus.NOT_FOUND, ExceptionMsg.EMPTY_RESULT_DATA_ACCESS, ex, request);
+        ApiError error = new ApiError(HttpStatus.NOT_FOUND, ExceptionMsg.ELEMENT_DOES_NOT_EXIST, ex, request);
         return buildResponseEntity(error);
     }
 
