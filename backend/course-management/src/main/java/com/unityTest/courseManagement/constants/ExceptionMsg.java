@@ -15,7 +15,7 @@ public class ExceptionMsg {
     public static final String ELEMENT_NOT_FOUND = "Element not found";
     public static final String DATABASE_CONFLICT = "Database conflict";
     public static final String PROPERTY_REFERENCE = "Property does not exist";
-    public static final String EMPTY_RESULT_DATA_ACCESS = "Element does not exist";
+    public static final String ELEMENT_DOES_NOT_EXIST = "Element does not exist";
 
     public static String MISSING_REQUEST_PARAMETER(String name) {
         return String.format("%s required parameter is missing", name);
