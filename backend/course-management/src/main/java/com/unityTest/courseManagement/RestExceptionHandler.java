@@ -66,7 +66,9 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
             HttpStatus status,
             WebRequest request) {
         String message = ExceptionMsg.HTTP_MEDIA_TYPE_NOT_SUPPORTED(ex.getContentType(), ex.getSupportedMediaTypes());
-        return buildResponseEntity(new ApiError(HttpStatus.UNSUPPORTED_MEDIA_TYPE, message, ex, request));
+        ApiError error = new ApiError(HttpStatus.UNSUPPORTED_MEDIA_TYPE, ex.getLocalizedMessage(), ex, request);
+        error.setDebugMessage(message);
+        return buildResponseEntity(error);
     }
 
     /**
@@ -97,6 +99,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     /**
      * Handle NoHandlerFoundException. Thrown when no handler exists for an endpoint.
+     * NOTE: NOT CURRENTLY IMPLEMENTED
      *
      * @param ex        NoHandlerFoundException
      * @param headers   HttpHeaders
