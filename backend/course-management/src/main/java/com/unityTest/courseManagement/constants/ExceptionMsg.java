@@ -18,7 +18,7 @@ public class ExceptionMsg {
     public static final String ELEMENT_DOES_NOT_EXIST = "Element does not exist";
 
     public static String MISSING_REQUEST_PARAMETER(String name) {
-        return String.format("%s required parameter is missing", name);
+        return String.format("%s parameter is missing", name);
     }
 
     public static String HTTP_MEDIA_TYPE_NOT_SUPPORTED(MediaType type, List<MediaType> supportedTypes) {

@@ -27,7 +27,8 @@ public class TestUtils {
     }
 
     public static MockHttpServletRequestBuilder delete(String url) {
-        return MockMvcRequestBuilders.delete(url);
+        return MockMvcRequestBuilders.delete(url)
+                .accept(MediaType.APPLICATION_JSON);
     }
 
     /**
