@@ -61,35 +61,35 @@ assignment
 ## Engagement
 
 ### Vote
-**POST** `/engagement/source/{sourceId}/vote`: Vote on a source
+**POST** `/engagement/{source}/{id}/vote`: Vote on a source item
 
 body={Vote}
 
-**GET** `/engagement/source/{sourceId}/vote`: Get the votes for a source
-
-?id={vote_id}
-?action={VoteAction}
-?author={id}
-
-**DELETE** `/engagement/source/{sourceId}/vote`: Remove a vote from a source
-
-?id={vote_id}
+**DELETE** `/engagement/{source}/{id}/vote`: Remove a vote for a source item
 
 ### Comment
-**POST** `/engagement/source/{sourceId}/comment`: Comment on a source
+**POST** `/engagement/{source}/{id}/comment`: Comment on a source item
 
 body={Comment}
 
-**GET** `/engagement/source/{sourceId}/comment`: Get comment for a source
+**GET** `/engagement/{source}/{id}/comment`: Get comments on a source item
+
+?id={commentId}
+?author={authorId}
+
+**PUT** `/engagement/{source}/{id}/comment`: Update a comment on a source item (Optional)
+
+body={Comment}
+
+**DELETE** `/engagement/{source}/{id}/comment/{commentId}`: Delete a comment on a source item (Restricted)
 
 ?id={comment_id}
 
-**DELETE** `/engagement/source/{sourceId}/comment`: Delete a comment on a source
-
-?id={comment_id}
+### Stats
+**GET** `/engagement/{source}/{id}/stats`: Get the statistics of a source item
 
 ## User
-**GET** `/user/{user_id}/assignments`: Get a user's assignments
+**GET** `/user/assignments`: Get the user's assignments
 
 ?id={assignmentId}
 ?name={assignmentName}
@@ -99,9 +99,11 @@ body={Comment}
 ?academicYear={academicYear}
 ?pinned={true | false}
 
-**POST** `/user/assignment/{assignmentId}/add`: Add an assignment to a user's workload
+**POST** `/user/assignment/{assignmentId}/add`: Add an assignment to the user's workload
 
-**PUT** `/user/assignment/{assignmentId}/add`: Update the preferences of a user's assigned assignment
+**PUT** `/user/assignment/{assignmentId}/add`: Update the preferences of the user's assigned assignment
+
+**GET** `/user/engagement/{source}/{id}/vote`: Get the user's vote on a source item
 
 # Test Runner Endpoints
 TBD
