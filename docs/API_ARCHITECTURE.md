@@ -106,38 +106,58 @@ body={Comment}
 **GET** `/user/engagement/{source}/{id}/vote`: Get the user's vote on a source item
 
 # Test Runner Endpoints
-TBD
 
-## Testing
-**POST** `/test/assignment/{assignment_id}/case`: Create a test case for an assignment
+## Test Suite
+**POST** `/suite`: Create a test suite for an assignment
 
-body={TestCase}
+body={Suite}
 
-**GET** `/test/assignment/{assignment_id}/case`: Get test cases for an assignment
+**GET** `/suite`: Get test suites
 
-?id={assignment_id}
-?voteScore={vote_score}
+?assignmentId={assignment_id}
+?name={suite name}
+?lang={programming language}
 
-**PUT** `/test/assignment/{assignment_id}/case`: Update a test case for an assignment
+**DELETE** `/suite/{suiteId}`: Delete a test suite (Restricted)
 
-body={TestCase}
+**POST** `/suite/run`: Run all test cases in test suite
 
-**DELETE** `/test/assignment/{assignment_id}/case`: Delete a test case for an assignment
+?id={test suite id}
 
-**POST** `/test/case/{case_id}/run`: Run a test case 
+## Test Case
+**POST** `/case`: Create a test case for a test suite
 
-body={Some way to pass assignment code}
-return={TestResult}
+body={Case}
 
-**POST** `/compile/codeblock`: Compile a code block
+**GET** `/case`: Retrieve a pageable view of test cases
 
-body={CodeBlock}
+?suiteId={test suite id}
+?lang={Programming language}
+
+**PUT** `/case`: Update a test case (if you are the author or ADMIN)
+
+body={Case}
+
+Updateable fields
+* code
+* description
+
+**DELETE** `/case/{caseId}`: Delete a test case (if you are the author or ADMIN)
+
+**POST**: `/case/compile`: Compile test case code in its language
+
+body={Case}
+
+**POST**: `/case/run`: Run test case(s) on a source code submission
+
+?ids={List of case ids to run}
+?submissionId={Id of submission}e]
+
+## Submission
+
+**POST** `/upload`: Upload source files as part of a submission 
 
 ## User
-**GET** `/user/{user_id}/testcase`: Get test cases written by a user
+**GET** `/user/cases`: Get test cases written by a user
 
-?id={test_case_id}
-?assignment={assignment_id}
-?assignment_name={assignment_name}
-
-**GET** `/user/{user_id}/testresults`: Get test results ran by a user
+**GET** `/user/uploads`: Get source code submissions uploaded by the user
