@@ -1,0 +1,51 @@
+server:
+  port: 8083
+
+spring:
+  data.web.pageable:
+    default-page-size: 20
+    max-page-size: 100
+  h2:
+    console:
+      enabled: true
+      path: /h2
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: admin
+    password:
+    driverClassName: org.h2.Driver
+    initialization-mode: always
+    schema: classpath*:/db/h2/bootstrap_schema.sql
+    data: classpath*:/db/h2/bootstrap_data.sql
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+
+swagger:
+  auth:
+    token-url: http://localhost:8180/auth/realms/puff/protocol/openid-connect/token
+    client-id: user-auth
+    client-secret: f80e13fa-5e3f-4078-939f-4e2d084c38da   # Replace with client id for user-auth
+  api:
+    title: Test Runner REST Api
+    description: Test Runner REST Api documentation and management
+    contact:
+      name: Benjamin Kostiuk
+      url:
+      email: benkostiuk1@gmail.com
+    license:
+      name: MIT License
+      url: https://opensource.org/licenses/MIT
+    version: 0.0.1
+
+management:
+  server:
+    port: 8083
+    address: 127.0.0.1
+  endpoints:
+    enabled-by-default: false
+  endpoint:
+    health.enabled: true
+    info.enabled: true
