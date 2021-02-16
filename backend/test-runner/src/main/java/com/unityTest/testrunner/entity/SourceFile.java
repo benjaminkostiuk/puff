@@ -1,21 +1,17 @@
 package com.unityTest.testrunner.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
  *  Models a source code file uploaded by a user
  */
 @Data
-@ApiModel(value = "SourceFile", description = "Models a submitted source file")
+@AllArgsConstructor
 @Entity
 @Table(name = "SOURCE_FILE")
 public class SourceFile {
@@ -35,22 +31,23 @@ public class SourceFile {
     private int id;
 
     // SourceFiles uploaded together are grouped by submissionId
-    @ApiModelProperty(value = "Submission id", required = true, example = "101")
     @Column(name = "SUBMISSION_ID")
     private int submissionId;
 
-    // Date of upload
-    @ApiModelProperty(value = "Submission datetime")
-    @CreationTimestamp
+    // Id of assignment that the source file is for
+    @Column(name = "ASSIGNMENT_ID")
+    private int assignmentId;
+
+    @Column(name = "FILE_NAME")
+    private String fileName;
+
+    // Date of submission upload
     @Column(name = "SUBMISSION_DATE")
     private Date submissionDate;
 
-    @JsonIgnore
-    @NotNull
     @Column(name = "AUTHOR_ID")
     private String authorId;
 
-    @NotNull
     @Column(name = "CONTENT")
     private byte[] content;
 }
