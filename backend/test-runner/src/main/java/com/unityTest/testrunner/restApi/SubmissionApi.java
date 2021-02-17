@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -21,7 +22,7 @@ public interface SubmissionApi extends BaseApi {
 
     /**
      * POST endpoint to upload source code files
-     * @return TODO figure this out
+     * @return Submission object as confirmation with file information
      */
     @ApiOperation(value = "Upload source code files", nickname = "uploadSourceFiles", response = Submission.class, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -29,10 +30,13 @@ public interface SubmissionApi extends BaseApi {
             @ApiParam(name = "files", required = true) @RequestParam("files") MultipartFile[] files,
             @ApiParam(name = "assignmentId", required = true) @RequestParam("assignmentId") Integer assignmentId) throws IOException;
 
-    @ApiOperation(value = "Download source code upload", nickname = "downloadSourceFiles")
+    /**
+     * GET endpoint to download files uploaded by a submission as a zip
+     * @param submissionId Id of submission to search for, downloading all source files uploaded by that submission
+     */
+    @ApiOperation(value = "Download source code upload", nickname = "downloadSourceFiles", produces = "application/zip")
     @GetMapping(value = "/download", produces = "application/zip")
     void downloadSourceFiles(
-            OutputStream out
-            //@ApiParam(name = "Submission id", required = true) @PathVariable(value = "submissionId") Integer submissionId
-    ) throws FileNotFoundException;
+            HttpServletResponse response,
+            @ApiParam(name = "Submission id", required = true) @RequestParam(value = "submissionId") Integer submissionId) throws IOException;
 }
