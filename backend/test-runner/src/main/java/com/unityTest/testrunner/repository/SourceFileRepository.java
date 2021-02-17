@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface SourceFileRepository extends JpaRepository<SourceFile, Integer>, JpaSpecificationExecutor<SourceFile> {
 
@@ -15,4 +17,11 @@ public interface SourceFileRepository extends JpaRepository<SourceFile, Integer>
      */
     @Query(value = "SELECT SOURCE_FILE_SUBMISSION_SEQUENCE.NEXTVAL FROM DUAL", nativeQuery = true)
     Integer nextSubmissionId();
+
+    /**
+     * Get list of all source files in a submission
+     * @param submissionId Submission id to search by
+     * @return List of source files in a submission
+     */
+    List<SourceFile> getSourceFilesBySubmissionId(Integer submissionId);
 }
