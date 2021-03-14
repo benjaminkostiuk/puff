@@ -53,17 +53,17 @@ public class Swagger2Config {
     @Value("${swagger.api.version}")
     private String version;
 
-//    @Value("${keycloak.realm}")
-//    private String realm;
-//
-//    @Value("${swagger.auth.token-url}")
-//    private String authTokenUrl;
-//
-//    @Value("${swagger.auth.client-secret}")
-//    private String authClientSecret;
-//
-//    @Value("${swagger.auth.client-id}")
-//    private String authClientId;
+    @Value("${keycloak.realm}")
+    private String realm;
+
+    @Value("${swagger.auth.token-url}")
+    private String authTokenUrl;
+
+    @Value("${swagger.auth.client-secret}")
+    private String authClientSecret;
+
+    @Value("${swagger.auth.client-id}")
+    private String authClientId;
 
     @Bean
     public Docket api() {
@@ -73,27 +73,27 @@ public class Swagger2Config {
                         .basePackage("com.unityTest.testrunner.restImpl"))
                 .paths(PathSelectors.regex("/.*"))
                 .build()
-                .apiInfo(apiEndPointsInfo());
-//                .securityContexts(Lists.newArrayList(securityContext()))
-//                .securitySchemes(Lists.newArrayList(securitySchema()));
+                .apiInfo(apiEndPointsInfo())
+                .securityContexts(Lists.newArrayList(securityContext()))
+                .securitySchemes(Lists.newArrayList(securitySchema()));
     }
 
-//    @Bean
-//    public SecurityConfiguration securityConfiguration() {
-//        return new SecurityConfiguration(authClientId, authClientSecret, realm, "", "", Collections.emptyMap(), false);
-//    }
-//
-//    private OAuth securitySchema() {
-//        List<GrantType> grantTypes = Lists.newArrayList(new ResourceOwnerPasswordCredentialsGrant(authTokenUrl));
-//        return new OAuth("oauth2", Collections.EMPTY_LIST, grantTypes);
-//    }
-//
-//    private SecurityContext securityContext() {
-//        return SecurityContext.builder()
-//                .securityReferences(Lists.newArrayList(new SecurityReference("oauth2", new AuthorizationScope[0])))
-//                .forPaths(PathSelectors.regex("/.*"))
-//                .build();
-//    }
+    @Bean
+    public SecurityConfiguration securityConfiguration() {
+        return new SecurityConfiguration(authClientId, authClientSecret, realm, "", "", Collections.emptyMap(), false);
+    }
+
+    private OAuth securitySchema() {
+        List<GrantType> grantTypes = Lists.newArrayList(new ResourceOwnerPasswordCredentialsGrant(authTokenUrl));
+        return new OAuth("oauth2", Collections.EMPTY_LIST, grantTypes);
+    }
+
+    private SecurityContext securityContext() {
+        return SecurityContext.builder()
+                .securityReferences(Lists.newArrayList(new SecurityReference("oauth2", new AuthorizationScope[0])))
+                .forPaths(PathSelectors.regex("/.*"))
+                .build();
+    }
 
     private ApiInfo apiEndPointsInfo() {
         return new ApiInfoBuilder().title(title)
