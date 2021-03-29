@@ -1,7 +1,7 @@
 package com.unityTest.testrunner.restApi;
 
 import com.unityTest.testrunner.entity.Suite;
-import com.unityTest.testrunner.models.SuitePage;
+import com.unityTest.testrunner.models.page.SuitePage;
 import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
