@@ -33,19 +33,17 @@ public class SourceFile {
     private int id;
 
     // SourceFiles uploaded together are grouped by submissionId
-    @Column(name = "SUBMISSION_ID")
-    private int submissionId;
+    @ManyToOne
+    @JoinColumn(name = "SUBMISSION_ID", referencedColumnName = "ID", updatable = false)
+    private Submission submission;
 
-    // Id of assignment that the source file is for
-    @Column(name = "ASSIGNMENT_ID")
-    private int assignmentId;
-
+    // Name of source file
     @Column(name = "FILE_NAME")
     private String fileName;
 
-    // Date of submission upload
-    @Column(name = "SUBMISSION_DATE")
-    private Date submissionDate;
+    // Size of source file
+    @Column(name = "FILE_SIZE")
+    private long fileSize;
 
     @Column(name = "AUTHOR_ID")
     private String authorId;
