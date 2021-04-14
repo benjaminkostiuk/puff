@@ -9,9 +9,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Models a file submission, or upload of one or more files
+ */
 @Data
 @ApiModel(value = "Submission", description = "Models a submission of source files")
-public class Submission {
+public class SubmissionEvent {
 
     @JsonIgnore
     private int submissionId;
@@ -28,11 +31,11 @@ public class Submission {
     @ApiModelProperty(value = "Link to download the files contained in the submission", required = true, example = "/download?submissionId=12")
     private String downloadUrl;
 
-    private Submission(Date submissionTime) {
+    private SubmissionEvent(Date submissionTime) {
         this.submissionTime = submissionTime;
     }
 
-    public Submission(int submissionId, int assignmentId, Date submissionTime) {
+    public SubmissionEvent(int submissionId, int assignmentId, Date submissionTime) {
         this(submissionTime);
         this.submissionId = submissionId;
         this.assignmentId = assignmentId;
@@ -40,7 +43,7 @@ public class Submission {
         this.downloadUrl = String.format("%s?submissionId=%d", "/download", submissionId);
     }
 
-    public void addSourceFile(String name, long size) {
+    public void addFile(String name, long size) {
         this.filesUploaded.add(new FileInfo(name, size));
     }
 }

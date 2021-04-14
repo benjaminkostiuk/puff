@@ -33,8 +33,8 @@ public class SourceFile {
     private int id;
 
     // SourceFiles uploaded together are grouped by submissionId
-    @ManyToOne
-    @JoinColumn(name = "SUBMISSION_ID", referencedColumnName = "ID", updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "SUBMISSION_ID", referencedColumnName = "ID", updatable = false, nullable = false)
     private Submission submission;
 
     // Name of source file
@@ -50,4 +50,12 @@ public class SourceFile {
 
     @Column(name = "CONTENT")
     private byte[] content;
+
+    public SourceFile(Submission submission, String fileName, long fileSize, String authorId, byte[] content) {
+        this.submission = submission;
+        this.fileName = fileName;
+        this.fileSize = fileSize;
+        this.authorId = authorId;
+        this.content = content;
+    }
 }
