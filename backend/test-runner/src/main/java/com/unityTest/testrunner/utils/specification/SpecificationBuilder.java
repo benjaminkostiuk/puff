@@ -6,6 +6,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.*;
+import java.util.Date;
 
 public abstract class SpecificationBuilder<T> {
 
@@ -46,6 +47,18 @@ public abstract class SpecificationBuilder<T> {
         return this;
     }
 
+    // Add Specification with criteria where d1 after d2
+    public SpecificationBuilder<T> after(Date date, String attr, String... attrs) {
+        if(date != null) this.combineAndSetSpecification(this.buildSpec(Operator.AFTER, date, attr, attrs));
+        return this;
+    }
+
+    // Add Specification with criteria where d1 before d2
+    public SpecificationBuilder<T> before(Date date, String attr, String... attrs) {
+        if(date != null) this.combineAndSetSpecification(this.buildSpec(Operator.BEFORE, date, attr, attrs));
+        return this;
+    }
+
     /**
      * Build a specification for an operation
      * @param operator Operator for specification
@@ -68,6 +81,10 @@ public abstract class SpecificationBuilder<T> {
                 switch (operator) {
                     case EQUALS:
                         return criteriaBuilder.equal(path, value);
+                    case BEFORE:
+                        return criteriaBuilder.lessThan(path, (Date) value);
+                    case AFTER:
+                        return criteriaBuilder.greaterThan(path, (Date) value);
                     default:
                         throw new IllegalArgumentException("Operation not supported. Operation must be a member of Operator enum.");
                 }
@@ -79,7 +96,9 @@ public abstract class SpecificationBuilder<T> {
      * Operation types supported by the Specification builder
      */
     private enum Operator {
-        EQUALS      // x = y
+        EQUALS,      // x = y
+        AFTER,       // d1 after d2
+        BEFORE       // d1 before d2
     }
 }
 

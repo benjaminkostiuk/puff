@@ -1,5 +1,9 @@
 package com.unityTest.testrunner.utils;
 
+import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+import org.keycloak.representations.AccessToken;
+
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.IntStream;
@@ -15,5 +19,11 @@ public class Utils {
                 .collect(HashMap::new,
                         (m, i) -> m.put(keyType.cast(entries[i]), valueType.cast(entries[i + 1])),
                         Map::putAll);
+    }
+
+    public static AccessToken getAuthToken(Principal principal) {
+        // Get the author id from the auth token
+        KeycloakAuthenticationToken keycloakAuthenticationToken = (KeycloakAuthenticationToken) principal;
+        return keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken();
     }
 }
