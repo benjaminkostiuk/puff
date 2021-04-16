@@ -7,6 +7,9 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 
+/**
+ * Models the information of a stored file
+ */
 @AllArgsConstructor
 @Data
 @ApiModel(value = "File", description = "Models a source code file from a submission")
