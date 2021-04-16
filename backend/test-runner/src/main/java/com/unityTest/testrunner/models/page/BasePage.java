@@ -1,4 +1,4 @@
-package com.unityTest.testrunner.models;
+package com.unityTest.testrunner.models.page;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

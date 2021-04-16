@@ -2,7 +2,7 @@ package com.unityTest.testrunner.restImpl;
 
 import com.unityTest.testrunner.entity.Suite;
 import com.unityTest.testrunner.models.PLanguage;
-import com.unityTest.testrunner.models.SuitePage;
+import com.unityTest.testrunner.models.page.SuitePage;
 import com.unityTest.testrunner.restApi.SuiteApi;
 import com.unityTest.testrunner.serviceImpl.SuiteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 
 import org.springframework.data.domain.Pageable;
+
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
 /**
@@ -25,6 +27,7 @@ public class SuiteController implements SuiteApi {
     private SuiteService suiteService;
 
     @Override
+    @RolesAllowed("ROLE_ADMIN")
     public ResponseEntity<Suite> createTestSuite(@Valid Suite suite) {
         return new ResponseEntity<>(suiteService.createSuite(suite), HttpStatus.CREATED);
     }
@@ -43,6 +46,7 @@ public class SuiteController implements SuiteApi {
     }
 
     @Override
+    @RolesAllowed("ROLE_ADMIN")
     public void deleteTestSuite(Integer suiteId) {
         suiteService.deleteSuite(suiteId);
     }

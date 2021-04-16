@@ -1,21 +1,19 @@
 package com.unityTest.testrunner.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
  *  Models a source code file uploaded by a user
  */
 @Data
-@ApiModel(value = "SourceFile", description = "Models a submitted source file")
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "SOURCE_FILE")
 public class SourceFile {
@@ -35,22 +33,29 @@ public class SourceFile {
     private int id;
 
     // SourceFiles uploaded together are grouped by submissionId
-    @ApiModelProperty(value = "Submission id", required = true, example = "101")
-    @Column(name = "SUBMISSION_ID")
-    private int submissionId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "SUBMISSION_ID", referencedColumnName = "ID", updatable = false, nullable = false)
+    private Submission submission;
 
-    // Date of upload
-    @ApiModelProperty(value = "Submission datetime")
-    @CreationTimestamp
-    @Column(name = "SUBMISSION_DATE")
-    private Date submissionDate;
+    // Name of source file
+    @Column(name = "FILE_NAME")
+    private String fileName;
 
-    @JsonIgnore
-    @NotNull
+    // Size of source file
+    @Column(name = "FILE_SIZE")
+    private long fileSize;
+
     @Column(name = "AUTHOR_ID")
     private String authorId;
 
-    @NotNull
     @Column(name = "CONTENT")
     private byte[] content;
+
+    public SourceFile(Submission submission, String fileName, long fileSize, String authorId, byte[] content) {
+        this.submission = submission;
+        this.fileName = fileName;
+        this.fileSize = fileSize;
+        this.authorId = authorId;
+        this.content = content;
+    }
 }
