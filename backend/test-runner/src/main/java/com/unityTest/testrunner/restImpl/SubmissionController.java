@@ -2,12 +2,13 @@ package com.unityTest.testrunner.restImpl;
 
 import com.unityTest.testrunner.entity.SourceFile;
 import com.unityTest.testrunner.entity.Submission;
+import com.unityTest.testrunner.entity.SubmissionFile;
 import com.unityTest.testrunner.exception.ElementNotFoundException;
 import com.unityTest.testrunner.exception.EmptyFileException;
 import com.unityTest.testrunner.exception.NoFilesUploadedException;
 import com.unityTest.testrunner.exception.TooManyFileUploadException;
 import com.unityTest.testrunner.models.response.SubmissionEvent;
-import com.unityTest.testrunner.repository.SourceFileRepository;
+import com.unityTest.testrunner.repository.SubmissionFileRepository;
 import com.unityTest.testrunner.repository.SubmissionRepository;
 import com.unityTest.testrunner.restApi.SubmissionApi;
 import com.unityTest.testrunner.utils.Utils;
@@ -36,7 +37,7 @@ public class SubmissionController implements SubmissionApi {
     private SubmissionRepository submissionRepository;
 
     @Autowired
-    private SourceFileRepository sourceFileRepository;
+    private SubmissionFileRepository sourceFileRepository;
 
     @Override
     public ResponseEntity<SubmissionEvent> uploadSourceFiles(Principal principal, MultipartFile[] files, Integer assignmentId) throws IOException {
@@ -59,8 +60,8 @@ public class SubmissionController implements SubmissionApi {
             // Throw exception if file is empty
             if(file.isEmpty()) throw new EmptyFileException(file.getOriginalFilename());
             // Create a new source file add it to the submission
-            SourceFile sourceFile = new SourceFile(submission, file.getOriginalFilename(), file.getSize(), authorId, file.getBytes());
-            submission.addSourceFile(sourceFile);
+            SubmissionFile submissionFile = new SubmissionFile(submission, file.getOriginalFilename(), file.getSize(), authorId, file.getBytes());
+            submission.addSubmissionFile(submissionFile);
         }
         // Save all source files
         sourceFileRepository.saveAll(submission.getSourceFiles());

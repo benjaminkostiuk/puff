@@ -4,8 +4,6 @@ import com.unityTest.testrunner.entity.Submission;
 import com.unityTest.testrunner.entity.Submission_;
 import com.unityTest.testrunner.models.page.CasePage;
 import com.unityTest.testrunner.models.page.SubmissionEventPage;
-import com.unityTest.testrunner.models.response.SubmissionEvent;
-import com.unityTest.testrunner.repository.SourceFileRepository;
 import com.unityTest.testrunner.repository.SubmissionRepository;
 import com.unityTest.testrunner.restApi.UserApi;
 import com.unityTest.testrunner.utils.Utils;
@@ -19,9 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Rest controller for the /user/* endpoints
