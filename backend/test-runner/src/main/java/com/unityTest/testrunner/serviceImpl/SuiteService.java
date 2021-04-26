@@ -1,17 +1,25 @@
 package com.unityTest.testrunner.serviceImpl;
 
 import com.unityTest.testrunner.entity.Suite;
+import com.unityTest.testrunner.entity.SuiteFile;
+import com.unityTest.testrunner.entity.SuiteFile_;
 import com.unityTest.testrunner.entity.Suite_;
 import com.unityTest.testrunner.exception.ElementNotFoundException;
+import com.unityTest.testrunner.exception.NoFilesUploadedException;
+import com.unityTest.testrunner.exception.NoSuiteFileException;
 import com.unityTest.testrunner.models.PLanguage;
+import com.unityTest.testrunner.repository.SuiteFileRepository;
 import com.unityTest.testrunner.repository.SuiteRepository;
 import com.unityTest.testrunner.utils.specification.AndSpecification;
+import com.unityTest.testrunner.utils.specification.SpecificationBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +28,9 @@ public class SuiteService implements com.unityTest.testrunner.service.SuiteServi
 
     @Autowired
     private SuiteRepository suiteRepository;
+
+    @Autowired
+    private SuiteFileRepository suiteFileRepository;
 
     /**
      * Create or update a suite
@@ -33,6 +44,42 @@ public class SuiteService implements com.unityTest.testrunner.service.SuiteServi
     }
 
     /**
+     * Set the testing file for a suite
+     * @param suiteId Id a suite
+     * @param file File to set for suite
+     * @return SuiteFile saved in repository
+     */
+    @Override
+    public SuiteFile setSuiteTestFile(int suiteId, String authorId, MultipartFile file) throws IOException {
+        if (file == null) throw new NoFilesUploadedException();     // Check file is present
+        Suite suite = this.getSuiteById(suiteId);       // Get matching test suite
+
+        // Perform checks based on lang
+        switch (suite.getLanguage()) {
+            case JAVA:
+                // TODO IMPLEMENT JAVA CHECKS
+                break;
+            case PYTHON3:
+                // TODO IMPLEMENT PYTHON3 CHECKS
+                break;
+            case HASKELL:
+                // TODO IMPLEMENT HASKELL CHECKS
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid language associated to test suite");        // TODO FIX THIS
+        }
+
+        // Check for overwrite
+        Specification<SuiteFile> spec = new AndSpecification<SuiteFile>().equal(suiteId, SuiteFile_.SUITE_ID).getSpec();
+        Optional<SuiteFile> opt = suiteFileRepository.findOne(spec);
+
+        // Get id to overwrite old suite file if it exists
+        int existingId = opt.map(SuiteFile::getId).orElse(0);
+        // Save file to repository
+        return suiteFileRepository.save(new SuiteFile(existingId, suiteId, file.getOriginalFilename(), file.getSize(), authorId, file.getBytes()));
+    }
+
+    /**
      * Get a list of test suites that match the passed arguments
      * @param id Id of suite to fetch
      * @param assignmentId Assignment id to match
@@ -43,6 +90,15 @@ public class SuiteService implements com.unityTest.testrunner.service.SuiteServi
     @Override
     public List<Suite> getSuites(Integer id, Integer assignmentId, String name, PLanguage language) {
         return getSuites(Pageable.unpaged(), id, assignmentId, name, language).getContent();
+    }
+
+    @Override
+    public SuiteFile getSuiteTestFile(int suiteId) {
+        // Find SuiteFile for suite
+        Specification<SuiteFile> spec = new AndSpecification<SuiteFile>().equal(suiteId, SuiteFile_.SUITE_ID).getSpec();
+        Optional<SuiteFile> opt = suiteFileRepository.findOne(spec);
+        if(!opt.isPresent()) throw new NoSuiteFileException(suiteId);
+        return opt.get();
     }
 
     /**

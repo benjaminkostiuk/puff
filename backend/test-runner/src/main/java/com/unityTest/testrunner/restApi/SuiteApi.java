@@ -1,17 +1,24 @@
 package com.unityTest.testrunner.restApi;
 
 import com.unityTest.testrunner.entity.Suite;
+import com.unityTest.testrunner.models.response.FileInfo;
 import com.unityTest.testrunner.models.page.SuitePage;
+import com.unityTest.testrunner.models.response.FileUploadEvent;
 import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 
 import javax.validation.Valid;
 import org.springframework.data.domain.Pageable;
+import springfox.documentation.annotations.ApiIgnore;
+
+import java.io.IOException;
+import java.security.Principal;
 
 @Api(value = "Test suite API", tags = "Test suite API", description = "Manage and run test suites")
 @Validated
@@ -28,6 +35,17 @@ public interface SuiteApi extends BaseApi {
     ResponseEntity<Suite> createTestSuite(@ApiParam(value = "Test suite to create", required = true) @Valid @RequestBody Suite suite);
 
     /**
+     * POST endpoint to set the test file for a test suite
+     * @return FileUploadEvent on successful file upload
+     */
+    @ApiOperation(value = "Upload the testing file for a test suite", nickname = "setTestSuiteFile", response = FileUploadEvent.class, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/{suiteId}/setFile", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    ResponseEntity<FileUploadEvent> setTestSuiteFile(
+            @ApiIgnore Principal principal,
+            @ApiParam(value = "Test suite id", required = true) @PathVariable(value = "suiteId") Integer suiteId,
+            @ApiParam(value = "File to set", required = true) @RequestParam("file") MultipartFile file) throws IOException;
+
+    /**
      * GET endpoint to retrieve test suites
      * Filter by assignment id, name and programming language
      * @return Pageable view of test suites matching query criteria
@@ -41,6 +59,14 @@ public interface SuiteApi extends BaseApi {
             @ApiParam("Name") @RequestParam(value = "name", required = false) String name,
             @ApiParam("Programming language") @RequestParam(value = "lang", required = false) String lang
     );
+
+    /**
+     * GET endpoint to retrieve contents of the test file set for a test suite
+     * @return FileInfo about the file set of test suite
+     */
+    @ApiOperation(value = "Get the contents of a test file for a test suite", nickname = "getTestSuiteFile", response = FileInfo.class, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{suiteId}/getFile", produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<FileInfo> getTestSuiteFile(@ApiParam(value = "Test suite id", required = true) @PathVariable(value = "suiteId") Integer suiteId);
 
     /**
      * DELETE endpoint to delete a test suite
