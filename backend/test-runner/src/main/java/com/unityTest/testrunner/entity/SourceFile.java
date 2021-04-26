@@ -1,5 +1,6 @@
 package com.unityTest.testrunner.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,7 +10,9 @@ import javax.persistence.*;
  *  Models a code file uploaded by a user
  */
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
+@MappedSuperclass
 public class SourceFile {
     // Name of source file
     @Column(name = "FILE_NAME")
@@ -24,11 +27,4 @@ public class SourceFile {
 
     @Column(name = "CONTENT")
     private byte[] content;
-
-    public SourceFile(String fileName, long fileSize, String authorId, byte[] content) {
-        this.fileName = fileName;
-        this.fileSize = fileSize;
-        this.authorId = authorId;
-        this.content = content;
-    }
 }

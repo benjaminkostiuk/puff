@@ -14,7 +14,6 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "SUITE_FILE")
@@ -39,8 +38,13 @@ public class SuiteFile extends SourceFile {
     @NotNull
     private Integer suiteId;
 
-    public SuiteFile(int suiteId, String fileName, long fileSize, String authorId, byte[] content) {
+    public SuiteFile(int id, int suiteId, String fileName, long fileSize, String authorId, byte[] content) {
         super(fileName, fileSize, authorId, content);
+        this.id = id;
         this.suiteId = suiteId;
+    }
+
+    public SuiteFile(int suiteId, String fileName, long fileSize, String authorId, byte[] content) {
+        this(0, suiteId, fileName, fileSize, authorId, content);
     }
 }
