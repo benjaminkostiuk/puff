@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.unityTest</groupId>
 	<artifactId>test-runner</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.3-SNAPSHOT</version>
 	<name>test-runner</name>
 	<description>Manage and run test suites and cases</description>
 
