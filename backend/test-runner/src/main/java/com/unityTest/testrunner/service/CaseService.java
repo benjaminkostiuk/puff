@@ -121,8 +121,9 @@ public class CaseService {
         // Update all updateable fields
         caseToUpdate.setFunctionName(caseInfo.getFunctionName());
         caseToUpdate.setDescription(caseInfo.getDescription());
-        caseToUpdate.setCode("");   // TODO FIX THIS
 
+        String code = codeService.buildTestCaseCode(caseToUpdate.getLanguage(), caseToUpdate.getFunctionName(), caseInfo.getBody());
+        caseToUpdate.setCode(code);
         // Save and return case
         return caseRepository.save(caseToUpdate);
     }
@@ -136,11 +137,8 @@ public class CaseService {
         // Find case to update
         Case caseToUpdate = getCaseById(id);
         // Update vote count
-        if(action == VoteAction.UPVOTE) {
-            caseToUpdate.setUpvotes(caseToUpdate.getUpvotes() + 1);
-        } else {
-            caseToUpdate.setUpvotes(caseToUpdate.getUpvotes() - 1);
-        }
+        int change = action == VoteAction.UPVOTE ? 1 : -1;
+        caseToUpdate.setUpvotes(caseToUpdate.getUpvotes() + change);
         caseRepository.save(caseToUpdate);
     }
 

@@ -152,11 +152,8 @@ public class SuiteService {
         // Find suite to update
         Suite suite = getSuiteById(id);
         // Update vote count
-        if(action == VoteAction.UPVOTE) {
-            suite.setUpvotes(suite.getUpvotes() + 1);
-        } else {
-            suite.setUpvotes(suite.getUpvotes() - 1);
-        }
+        int change = action == VoteAction.UPVOTE ? 1 : -1;
+        suite.setUpvotes(suite.getUpvotes() + change);
         suiteRepository.save(suite);
     }
 }
