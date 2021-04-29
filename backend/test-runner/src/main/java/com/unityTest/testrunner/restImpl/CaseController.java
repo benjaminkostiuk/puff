@@ -67,7 +67,7 @@ public class CaseController implements CaseApi {
         Author author = new Author(token.getGivenName(), token.getFamilyName());     // Construct author from access token
 
         // Check if user is owner or admin
-        if(!caseToUpdate.getAuthorId().equals(token.getSubject()) && !Utils.isAdminUser(token)) throw new AccessDeniedException("Access Denied");
+        if(!Utils.isAuthorOrAdmin(token, caseToUpdate.getAuthorId())) throw new AccessDeniedException("Access Denied");
         // Update case and return updated case
         return new ResponseEntity<>(caseService.updateCase(caseId, testCaseInfo).toTestCase(author), HttpStatus.OK);
     }
@@ -78,7 +78,7 @@ public class CaseController implements CaseApi {
         Case caseToDelete = caseService.getCaseById(caseId);            // Find case to delete
 
         // Check if user deleting is not the author or admin
-        if(!caseToDelete.getAuthorId().equals(token.getSubject()) && !Utils.isAdminUser(token)) throw new AccessDeniedException("Access Denied");
+        if(!Utils.isAuthorOrAdmin(token, caseToDelete.getAuthorId())) throw new AccessDeniedException("Access Denied");
         // If allowed, delete the test case
         caseService.deleteCase(caseId);
     }
