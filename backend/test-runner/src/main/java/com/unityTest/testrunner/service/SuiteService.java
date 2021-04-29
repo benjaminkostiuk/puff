@@ -85,8 +85,8 @@ public class SuiteService {
      * @param language Suite programming language to match
      * @return List of test suites with fields matching the passed arguments
      */
-    public List<Suite> getSuites(Integer id, Integer assignmentId, String name, PLanguage language) {
-        return getSuites(Pageable.unpaged(), id, assignmentId, name, language).getContent();
+    public List<Suite> getSuites(Integer id, Integer assignmentId, String name, PLanguage language, String authorId) {
+        return getSuites(Pageable.unpaged(), id, assignmentId, name, language, authorId).getContent();
     }
 
     /**
@@ -98,13 +98,14 @@ public class SuiteService {
      * @param language Suite programming language to match
      * @return Page view of suites from repository matching passed arguments and formatted by the pageable param
      */
-    public Page<Suite> getSuites(Pageable pageable, Integer id, Integer assignmentId, String name, PLanguage language) {
+    public Page<Suite> getSuites(Pageable pageable, Integer id, Integer assignmentId, String name, PLanguage language, String authorId) {
         // Build specification
         Specification<Suite> spec = new AndSpecification<Suite>()
                 .equal(id, Suite_.ID)
                 .equal(assignmentId, Suite_.ASSIGNMENT_ID)
                 .equal(name, Suite_.NAME)
-                .equal(language, Suite_.LANGUAGE).getSpec();
+                .equal(language, Suite_.LANGUAGE)
+                .equal(authorId, Suite_.AUTHOR_ID).getSpec();
         return suiteRepository.findAll(spec, pageable);
     }
 

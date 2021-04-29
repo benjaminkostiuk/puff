@@ -4,12 +4,14 @@ import com.unityTest.testrunner.entity.Case;
 import com.unityTest.testrunner.entity.Submission;
 import com.unityTest.testrunner.entity.Submission_;
 import com.unityTest.testrunner.models.PLanguage;
+import com.unityTest.testrunner.models.page.SuitePage;
 import com.unityTest.testrunner.models.page.TestCasePage;
 import com.unityTest.testrunner.models.page.SubmissionEventPage;
 import com.unityTest.testrunner.models.response.Author;
 import com.unityTest.testrunner.repository.SubmissionRepository;
 import com.unityTest.testrunner.restApi.UserApi;
 import com.unityTest.testrunner.service.CaseService;
+import com.unityTest.testrunner.service.SuiteService;
 import com.unityTest.testrunner.utils.Utils;
 import com.unityTest.testrunner.utils.specification.AndSpecification;
 import org.keycloak.representations.AccessToken;
@@ -35,6 +37,20 @@ public class UserController implements UserApi {
 
     @Autowired
     private CaseService caseService;
+
+    @Autowired
+    private SuiteService suiteService;
+
+    @Override
+    public ResponseEntity<SuitePage> getUserTestSuites(Principal principal, Pageable pageable, Integer id, Integer assignmentId, String name, String lang) {
+        // Extract author id from access token
+        String authorId = Utils.getAuthToken(principal).getSubject();
+        // Convert lang to PLanguage
+        PLanguage pLanguage = Utils.parsePLanguage(lang);
+        // Retrieve results using service
+        SuitePage page = new SuitePage(suiteService.getSuites(pageable, id, assignmentId, name, pLanguage, authorId));
+        return new ResponseEntity<>(page, HttpStatus.OK);
+    }
 
     @Override
     public ResponseEntity<TestCasePage> getUserTestCases(Principal principal, Pageable pageable, Integer id, Integer suiteId, String functionName, String lang) {

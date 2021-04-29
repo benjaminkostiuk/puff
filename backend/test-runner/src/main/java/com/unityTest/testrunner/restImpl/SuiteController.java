@@ -71,7 +71,7 @@ public class SuiteController implements SuiteApi {
             catch(IllegalArgumentException e) { throw new HttpMessageNotReadableException("Not one of accepted values"); }
         }
         // Retrieve results using service
-        SuitePage page = new SuitePage(suiteService.getSuites(pageable, id, assignmentId, name, pLanguage));
+        SuitePage page = new SuitePage(suiteService.getSuites(pageable, id, assignmentId, name, pLanguage, null));
         return new ResponseEntity<>(page, HttpStatus.OK);
     }
 
