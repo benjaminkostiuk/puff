@@ -18,9 +18,9 @@ public interface SuiteService {
 
     List<Suite> getSuites(Integer id, Integer assignmentId, String name, PLanguage language);
 
-    SuiteFile getSuiteTestFile(int suiteId);
-
     Page<Suite> getSuites(Pageable pageable, Integer id, Integer assignmentId, String name, PLanguage language);
+
+    SuiteFile getSuiteTestFile(int suiteId);
 
     Suite getSuiteById(int id) throws ElementNotFoundException;
 

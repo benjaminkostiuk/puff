@@ -11,7 +11,6 @@ import com.unityTest.testrunner.models.PLanguage;
 import com.unityTest.testrunner.repository.SuiteFileRepository;
 import com.unityTest.testrunner.repository.SuiteRepository;
 import com.unityTest.testrunner.utils.specification.AndSpecification;
-import com.unityTest.testrunner.utils.specification.SpecificationBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -92,15 +91,6 @@ public class SuiteService implements com.unityTest.testrunner.service.SuiteServi
         return getSuites(Pageable.unpaged(), id, assignmentId, name, language).getContent();
     }
 
-    @Override
-    public SuiteFile getSuiteTestFile(int suiteId) {
-        // Find SuiteFile for suite
-        Specification<SuiteFile> spec = new AndSpecification<SuiteFile>().equal(suiteId, SuiteFile_.SUITE_ID).getSpec();
-        Optional<SuiteFile> opt = suiteFileRepository.findOne(spec);
-        if(!opt.isPresent()) throw new NoSuiteFileException(suiteId);
-        return opt.get();
-    }
-
     /**
      * Get a Page view of test suites that match the passed arguments
      * @param pageable Pageable object specifying page size, sort and index
@@ -119,6 +109,15 @@ public class SuiteService implements com.unityTest.testrunner.service.SuiteServi
                 .equal(name, Suite_.NAME)
                 .equal(language, Suite_.LANGUAGE).getSpec();
         return suiteRepository.findAll(spec, pageable);
+    }
+
+    @Override
+    public SuiteFile getSuiteTestFile(int suiteId) {
+        // Find SuiteFile for suite
+        Specification<SuiteFile> spec = new AndSpecification<SuiteFile>().equal(suiteId, SuiteFile_.SUITE_ID).getSpec();
+        Optional<SuiteFile> opt = suiteFileRepository.findOne(spec);
+        if(!opt.isPresent()) throw new NoSuiteFileException(suiteId);
+        return opt.get();
     }
 
     /**
