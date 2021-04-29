@@ -75,7 +75,7 @@ public abstract class SpecificationBuilder<T> {
                 // Build path
                 Path path = root.get(attr);
                 if(ArrayUtils.isNotEmpty(attrs)) {
-                    for(String attribute : attrs) path = path.get(attr);
+                    for(String attribute : attrs) path = path.get(attribute);
                 }
                 // Return specification with correct operation
                 switch (operator) {
