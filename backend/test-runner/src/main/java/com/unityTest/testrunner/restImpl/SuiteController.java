@@ -65,11 +65,7 @@ public class SuiteController implements SuiteApi {
     @Override
     public ResponseEntity<SuitePage> getTestSuites(Pageable pageable, Integer id, Integer assignmentId, String name, String lang) {
         // Convert lang to PLanguage
-        PLanguage pLanguage = null;
-        if(lang != null) {
-            try { pLanguage = PLanguage.valueOf(lang); }
-            catch(IllegalArgumentException e) { throw new HttpMessageNotReadableException("Not one of accepted values"); }
-        }
+        PLanguage pLanguage = Utils.parsePLanguage(lang);
         // Retrieve results using service
         SuitePage page = new SuitePage(suiteService.getSuites(pageable, id, assignmentId, name, pLanguage, null));
         return new ResponseEntity<>(page, HttpStatus.OK);
@@ -96,12 +92,7 @@ public class SuiteController implements SuiteApi {
     @RolesAllowed("ROLE_SYS")
     public void voteOnTestSuite(Integer suiteId, String action) {
         // Convert action to VoteAction
-        VoteAction voteAction;
-        try {
-            voteAction = VoteAction.valueOf(action);
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Not one of accepted values for vote action");
-        }
+        VoteAction voteAction = Utils.parseVoteAction(action);
         suiteService.updateSuiteUpvotes(suiteId, voteAction);
     }
 

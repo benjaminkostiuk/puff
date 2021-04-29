@@ -58,12 +58,7 @@ public class UserController implements UserApi {
         Author author = new Author(token.getGivenName(), token.getFamilyName());    // Constructor author obj from token
 
         // Convert lang to PLanguage
-        PLanguage pLanguage = null;
-        if(lang != null) {
-            try { pLanguage = PLanguage.valueOf(lang); }
-            catch (IllegalArgumentException e) { throw new IllegalArgumentException("Not one of accepted values for language"); }
-        }
-
+        PLanguage pLanguage = Utils.parsePLanguage(lang);
         // Call case service and build TestCasePage to return
         Page<Case> page = caseService.getCases(pageable, id, suiteId, functionName, pLanguage, token.getSubject());
         return new ResponseEntity<>(new TestCasePage(page, author), HttpStatus.OK);

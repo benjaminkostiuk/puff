@@ -1,5 +1,7 @@
 package com.unityTest.testrunner.utils;
 
+import com.unityTest.testrunner.models.PLanguage;
+import com.unityTest.testrunner.models.VoteAction;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.keycloak.representations.AccessToken;
 
@@ -19,6 +21,29 @@ public class Utils {
                 .collect(HashMap::new,
                         (m, i) -> m.put(keyType.cast(entries[i]), valueType.cast(entries[i + 1])),
                         Map::putAll);
+    }
+
+    // Convert a lang string to a PLanguage
+    public static PLanguage parsePLanguage(String lang) {
+        // Convert lang to PLanguage
+        PLanguage pLanguage = null;
+        if(lang != null) {
+            try { pLanguage = PLanguage.valueOf(lang); }
+            catch (IllegalArgumentException e) { throw new IllegalArgumentException("Not one of accepted values for language"); }
+        }
+        return pLanguage;
+    }
+
+    // Convert a vote action string into a VoteAction obj
+    public static VoteAction parseVoteAction(String action) {
+        // Convert action to VoteAction
+        VoteAction voteAction;
+        try {
+            voteAction = VoteAction.valueOf(action);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Not one of accepted values for vote action");
+        }
+        return voteAction;
     }
 
     public static AccessToken getAuthToken(Principal principal) {

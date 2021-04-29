@@ -38,7 +38,7 @@ public interface CaseApi extends BaseApi {
 
     /**
      * GET endpoint to retrieve test cases
-     * Filter by id, suite id and programming language
+     * Filter by id, suite id, function name and programming language
      * @return Pageable view of test cases that match query criteria
      */
     @ApiOperation(value = "Retrieve a pageable view of test cases", nickname = "getTestCases", response = TestCasePage.class, produces = MediaType.APPLICATION_JSON_VALUE)

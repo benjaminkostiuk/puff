@@ -50,11 +50,7 @@ public class CaseController implements CaseApi {
     @Override
     public ResponseEntity<TestCasePage> getTestCases(Pageable pageable, Integer id, Integer suiteId, String functionName, String lang) {
         // Convert lang to PLanguage
-        PLanguage pLanguage = null;
-        if(lang != null) {
-            try { pLanguage = PLanguage.valueOf(lang); }
-            catch (IllegalArgumentException e) { throw new IllegalArgumentException("Not one of accepted values for language"); }
-        }
+        PLanguage pLanguage = Utils.parsePLanguage(lang);
         // Retrieve results using service
         TestCasePage page = new TestCasePage(caseService.getCases(pageable, id, suiteId, functionName, pLanguage, null), keycloakService.getConnection());
         return new ResponseEntity<>(page, HttpStatus.OK);
@@ -87,12 +83,7 @@ public class CaseController implements CaseApi {
     @RolesAllowed("ROLE_SYS")
     public void voteOnTestCase(Integer caseId, String action) {
         // Convert action to VoteAction
-        VoteAction voteAction;
-        try {
-            voteAction = VoteAction.valueOf(action);
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Not one of accepted values for vote action");
-        }
+        VoteAction voteAction = Utils.parseVoteAction(action);
         caseService.updateCaseUpvotes(caseId, voteAction);
     }
 
