@@ -29,6 +29,9 @@ public class CaseService {
     @Autowired
     private CaseRepository caseRepository;
 
+    @Autowired
+    private CodeService codeService;
+
     /**
      * Create a case
      * @param testCase Case to create
@@ -50,8 +53,10 @@ public class CaseService {
         Suite suite = suiteService.getSuiteById(caseInfo.getSuiteId());
         // Verify the programming languages match
         if(caseInfo.getLanguage() != suite.getLanguage()) throw new ProgrammingLanguageMismatch(suite.getLanguage(), caseInfo.getLanguage());
+        // Get test case code
+        String code = codeService.buildTestCaseCode(caseInfo.getLanguage(), caseInfo.getFunctionName(), caseInfo.getBody());
         // Build case to save
-        Case caseToCreate = new Case(suite, authorId, caseInfo.getFunctionName(), caseInfo.getDescription(), caseInfo.getLanguage(), "");
+        Case caseToCreate = new Case(suite, authorId, caseInfo.getFunctionName(), caseInfo.getDescription(), caseInfo.getLanguage(), code);
         return this.createCase(caseToCreate);
     }
 
