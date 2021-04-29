@@ -1,13 +1,19 @@
 package com.unityTest.testrunner.restImpl;
 
+import com.unityTest.testrunner.entity.Case;
 import com.unityTest.testrunner.entity.Submission;
 import com.unityTest.testrunner.entity.Submission_;
-import com.unityTest.testrunner.models.page.CasePage;
+import com.unityTest.testrunner.models.PLanguage;
+import com.unityTest.testrunner.models.page.TestCasePage;
 import com.unityTest.testrunner.models.page.SubmissionEventPage;
+import com.unityTest.testrunner.models.response.Author;
 import com.unityTest.testrunner.repository.SubmissionRepository;
 import com.unityTest.testrunner.restApi.UserApi;
+import com.unityTest.testrunner.serviceImpl.CaseService;
+import com.unityTest.testrunner.serviceImpl.KeycloakService;
 import com.unityTest.testrunner.utils.Utils;
 import com.unityTest.testrunner.utils.specification.AndSpecification;
+import org.keycloak.representations.AccessToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,9 +34,24 @@ public class UserController implements UserApi {
     @Autowired
     private SubmissionRepository submissionRepository;
 
+    @Autowired
+    private CaseService caseService;
+
     @Override
-    public ResponseEntity<CasePage> getUserTestCases(Pageable pageable, Integer id, Integer suiteId) {
-        return null;
+    public ResponseEntity<TestCasePage> getUserTestCases(Principal principal, Pageable pageable, Integer id, Integer suiteId, String functionName, String lang) {
+        AccessToken token = Utils.getAuthToken(principal);                          // Extract request access token
+        Author author = new Author(token.getGivenName(), token.getFamilyName());    // Constructor author obj from token
+
+        // Convert lang to PLanguage
+        PLanguage pLanguage = null;
+        if(lang != null) {
+            try { pLanguage = PLanguage.valueOf(lang); }
+            catch (IllegalArgumentException e) { throw new IllegalArgumentException("Not one of accepted values for language"); }
+        }
+
+        // Call case service and build TestCasePage to return
+        Page<Case> page = caseService.getCases(pageable, id, suiteId, functionName, pLanguage, token.getSubject());
+        return new ResponseEntity<>(new TestCasePage(page, author), HttpStatus.OK);
     }
 
     @Override

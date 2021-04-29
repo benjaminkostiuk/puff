@@ -1,6 +1,6 @@
 package com.unityTest.testrunner.restApi;
 
-import com.unityTest.testrunner.models.page.CasePage;
+import com.unityTest.testrunner.models.page.TestCasePage;
 import com.unityTest.testrunner.models.page.SubmissionEventPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,10 +27,13 @@ public interface UserApi extends BaseApi {
      */
     @ApiOperation(value = "Retrieve a pageable view of test cases written by the user", nickname = "getUserTestCases", produces = MediaType.APPLICATION_JSON_VALUE)
     @GetMapping(value = "/cases", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<CasePage> getUserTestCases(
-        Pageable pageable,
-        @ApiParam("Test case id") @RequestParam(value = "id", required = false) Integer id,
-        @ApiParam("Suite id") @RequestParam(value = "suiteId", required = false) Integer suiteId
+    ResponseEntity<TestCasePage> getUserTestCases(
+            @ApiIgnore Principal principal,
+            Pageable pageable,
+            @ApiParam("Test case id") @RequestParam(value = "id", required = false) Integer id,
+            @ApiParam("Suite id") @RequestParam(value = "suiteId", required = false) Integer suiteId,
+            @ApiParam("Function name") @RequestParam(value = "name", required = false) String functionName,
+            @ApiParam("Programming language") @RequestParam(value = "lang", required = false) String lang
     );
 
     /**
