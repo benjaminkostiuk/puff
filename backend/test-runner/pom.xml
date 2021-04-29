@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.unityTest</groupId>
 	<artifactId>test-runner</artifactId>
-	<version>0.0.3-SNAPSHOT</version>
+	<version>0.0.4-SNAPSHOT</version>
 	<name>test-runner</name>
 	<description>Manage and run test suites and cases</description>
 
@@ -114,6 +114,12 @@
 			<groupId>org.keycloak</groupId>
 			<artifactId>keycloak-spring-boot-starter</artifactId>
 			<version>${keycloak.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.keycloak</groupId>
+			<artifactId>keycloak-admin-client</artifactId>
+			<version>10.0.0</version>
 		</dependency>
 
 		<dependency>
