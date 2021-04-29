@@ -3,6 +3,7 @@ package com.unityTest.testrunner.restImpl;
 import com.unityTest.testrunner.entity.Case;
 import com.unityTest.testrunner.models.PLanguage;
 import com.unityTest.testrunner.models.TestCaseInfo;
+import com.unityTest.testrunner.models.VoteAction;
 import com.unityTest.testrunner.models.page.TestCasePage;
 import com.unityTest.testrunner.models.response.Author;
 import com.unityTest.testrunner.models.response.TestCase;
@@ -18,6 +19,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import org.springframework.data.domain.Pageable;
 
@@ -79,6 +81,19 @@ public class CaseController implements CaseApi {
         if(!caseToDelete.getAuthorId().equals(token.getSubject()) && !Utils.isAdminUser(token)) throw new AccessDeniedException("Access Denied");
         // If allowed, delete the test case
         caseService.deleteCase(caseId);
+    }
+
+    @Override
+    @RolesAllowed("ROLE_SYS")
+    public void voteOnTestCase(Integer caseId, String action) {
+        // Convert action to VoteAction
+        VoteAction voteAction;
+        try {
+            voteAction = VoteAction.valueOf(action);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Not one of accepted values for vote action");
+        }
+        caseService.updateCaseUpvotes(caseId, voteAction);
     }
 
     @Override

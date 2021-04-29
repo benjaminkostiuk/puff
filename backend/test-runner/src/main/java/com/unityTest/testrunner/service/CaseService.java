@@ -8,6 +8,7 @@ import com.unityTest.testrunner.exception.ElementNotFoundException;
 import com.unityTest.testrunner.exception.ProgrammingLanguageMismatch;
 import com.unityTest.testrunner.models.PLanguage;
 import com.unityTest.testrunner.models.TestCaseInfo;
+import com.unityTest.testrunner.models.VoteAction;
 import com.unityTest.testrunner.repository.CaseRepository;
 import com.unityTest.testrunner.utils.specification.AndSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,6 +120,23 @@ public class CaseService {
 
         // Save and return case
         return caseRepository.save(caseToUpdate);
+    }
+
+    /**
+     * Update the upvote count on a case
+     * @param id Id of case to vote on
+     * @param action Vote action to modify upvote count
+     */
+    public void updateCaseUpvotes(int id, VoteAction action) {
+        // Find case to update
+        Case caseToUpdate = getCaseById(id);
+        // Update vote count
+        if(action == VoteAction.UPVOTE) {
+            caseToUpdate.setUpvotes(caseToUpdate.getUpvotes() + 1);
+        } else {
+            caseToUpdate.setUpvotes(caseToUpdate.getUpvotes() - 1);
+        }
+        caseRepository.save(caseToUpdate);
     }
 
     /**

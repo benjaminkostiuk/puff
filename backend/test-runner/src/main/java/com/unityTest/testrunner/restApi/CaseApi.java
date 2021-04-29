@@ -33,7 +33,8 @@ public interface CaseApi extends BaseApi {
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<TestCase> createTestCase(
             @ApiIgnore Principal principal,
-            @ApiParam(value = "Test case to create", required = true) @Valid @RequestBody TestCaseInfo testCaseInfo);
+            @ApiParam(value = "Test case to create", required = true) @Valid @RequestBody TestCaseInfo testCaseInfo
+    );
 
     /**
      * GET endpoint to retrieve test cases
@@ -73,7 +74,22 @@ public interface CaseApi extends BaseApi {
     @DeleteMapping(value = "/{caseId}")
     void deleteTestCase(
             @ApiIgnore Principal principal,
-            @ApiParam(value = "Test case id", required = true) @PathVariable(value = "caseId") Integer caseId);
+            @ApiParam(value = "Test case id", required = true) @PathVariable(value = "caseId") Integer caseId
+    );
+
+    /**
+     * POST endpoint to update test case vote count
+     * SYSTEM LEVEL endpoint only accessible with ROLE_SYS
+     * @param caseId Id of case
+     * @param action Vote action
+     */
+    @ApiOperation(value = "Vote on a test case", nickname = "voteTestCase")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    @PostMapping(value = "/{caseId}/vote")
+    void voteOnTestCase(
+            @ApiParam(value = "Test case id", required = true) @PathVariable(value = "caseId") Integer caseId,
+            @ApiParam(value = "Vote action", required = true) @RequestParam(value = "action") String action
+    );
 
     /**
      * POST endpoint to run test cases
