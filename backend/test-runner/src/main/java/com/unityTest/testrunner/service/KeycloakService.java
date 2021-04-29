@@ -1,4 +1,4 @@
-package com.unityTest.testrunner.serviceImpl;
+package com.unityTest.testrunner.service;
 
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.keycloak.OAuth2Constants;

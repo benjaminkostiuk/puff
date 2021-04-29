@@ -7,7 +7,7 @@ import com.unityTest.testrunner.models.page.SuitePage;
 import com.unityTest.testrunner.models.response.FileInfo;
 import com.unityTest.testrunner.models.response.FileUploadEvent;
 import com.unityTest.testrunner.restApi.SuiteApi;
-import com.unityTest.testrunner.serviceImpl.SuiteService;
+import com.unityTest.testrunner.service.SuiteService;
 import com.unityTest.testrunner.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
