@@ -26,4 +26,8 @@ public class Utils {
         KeycloakAuthenticationToken keycloakAuthenticationToken = (KeycloakAuthenticationToken) principal;
         return keycloakAuthenticationToken.getAccount().getKeycloakSecurityContext().getToken();
     }
+
+    public static boolean isAdminUser(AccessToken accessToken) {
+        return accessToken.getRealmAccess().getRoles().contains("ROLE_ADMIN");
+    }
 }
