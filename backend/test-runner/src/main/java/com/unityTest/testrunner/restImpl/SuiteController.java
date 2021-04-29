@@ -59,7 +59,7 @@ public class SuiteController implements SuiteApi {
         PLanguage pLanguage = null;
         if(lang != null) {
             try { pLanguage = PLanguage.valueOf(lang); }
-            catch(IllegalArgumentException e) { throw new HttpMessageNotReadableException("Not of of accepted values"); }
+            catch(IllegalArgumentException e) { throw new HttpMessageNotReadableException("Not one of accepted values"); }
         }
         // Retrieve results using service
         SuitePage page = new SuitePage(suiteService.getSuites(pageable, id, assignmentId, name, pLanguage));
