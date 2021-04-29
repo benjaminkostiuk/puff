@@ -28,6 +28,10 @@ public class Utils {
     }
 
     public static boolean isAdminUser(AccessToken accessToken) {
-        return accessToken.getRealmAccess().getRoles().contains("ROLE_ADMIN");
+        return accessToken.getRealmAccess().getRoles().contains("admin");
+    }
+
+    public static boolean isAuthorOrAdmin(AccessToken accessToken, String authorId) {
+        return authorId.equals(accessToken.getSubject()) || isAdminUser(accessToken);
     }
 }

@@ -1,6 +1,6 @@
 package com.unityTest.testrunner.entity;
 
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.unityTest.testrunner.models.PLanguage;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -50,4 +50,13 @@ public class Suite {
     @NotNull
     @Column(name = "LANG")
     private PLanguage language;
+
+    // Upvote count of test suite
+    @ApiModelProperty(value = "upvotes")
+    @Column(name = "UPVOTE_COUNT")
+    private int upvotes;
+
+    @JsonIgnore
+    @Column(name = "AUTHOR_ID")
+    private String authorId;
 }

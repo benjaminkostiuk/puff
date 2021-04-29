@@ -32,7 +32,10 @@ public interface SuiteApi extends BaseApi {
     @ApiOperation(value = "Create a test suite", nickname = "createTestSuite", response = Suite.class, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiResponses({ @ApiResponse(code = 201, message = "Created", response = Suite.class) })
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<Suite> createTestSuite(@ApiParam(value = "Test suite to create", required = true) @Valid @RequestBody Suite suite);
+    ResponseEntity<Suite> createTestSuite(
+            @ApiIgnore Principal principal,
+            @ApiParam(value = "Test suite to create", required = true) @Valid @RequestBody Suite suite
+    );
 
     /**
      * POST endpoint to set the test file for a test suite
@@ -75,7 +78,24 @@ public interface SuiteApi extends BaseApi {
     @ApiOperation(value = "Delete a test suite", nickname = "deleteTestSuite")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     @DeleteMapping(value = "/{suiteId}")
-    void deleteTestSuite(@ApiParam(value = "Test suite id", required = true) @PathVariable(value = "suiteId") Integer suiteId);
+    void deleteTestSuite(
+            @ApiIgnore Principal principal,
+            @ApiParam(value = "Test suite id", required = true) @PathVariable(value = "suiteId") Integer suiteId
+    );
+
+    /**
+     * POST endpoint to update test suite vote count
+     * SYSTEM LEVEL endpoint only accessible with ROLE_SYS
+     * @param suiteId Id of case
+     * @param action Vote action
+     */
+    @ApiOperation(value = "Vote on a test case", nickname = "voteTestSuite")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    @PostMapping(value = "/{suiteId}/vote")
+    void voteOnTestSuite(
+            @ApiParam(value = "Test suite id", required = true) @PathVariable(value = "suiteId") Integer suiteId,
+            @ApiParam(value = "Vote action", required = true) @RequestParam(value = "action") String action
+    );
 
     /**
      * POST endpoint to run a test suite using source files from a submission

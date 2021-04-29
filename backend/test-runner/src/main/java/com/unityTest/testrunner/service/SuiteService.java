@@ -8,6 +8,7 @@ import com.unityTest.testrunner.exception.ElementNotFoundException;
 import com.unityTest.testrunner.exception.NoFilesUploadedException;
 import com.unityTest.testrunner.exception.NoSuiteFileException;
 import com.unityTest.testrunner.models.PLanguage;
+import com.unityTest.testrunner.models.VoteAction;
 import com.unityTest.testrunner.repository.SuiteFileRepository;
 import com.unityTest.testrunner.repository.SuiteRepository;
 import com.unityTest.testrunner.utils.specification.AndSpecification;
@@ -139,5 +140,22 @@ public class SuiteService {
      */
     public void deleteSuite(int id) {
         suiteRepository.deleteById(id);
+    }
+
+    /**
+     * Update the upvote count on a suite
+     * @param id Id of suite to vote on
+     * @param action Vote action to modify upvote count
+     */
+    public void updateSuiteUpvotes(int id, VoteAction action) {
+        // Find suite to update
+        Suite suite = getSuiteById(id);
+        // Update vote count
+        if(action == VoteAction.UPVOTE) {
+            suite.setUpvotes(suite.getUpvotes() + 1);
+        } else {
+            suite.setUpvotes(suite.getUpvotes() - 1);
+        }
+        suiteRepository.save(suite);
     }
 }
