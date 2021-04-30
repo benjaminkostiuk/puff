@@ -43,7 +43,7 @@ _Puff_ uses a microservice architecture with [Spring Boot](https://spring.io/pro
 * Verify your installation by running `java -version`
 
 ### Install Maven
-_Puff_ uses [Maven](https://maven.apache.org/) as its build tool for its backend.
+_Puff_ uses [Maven](https://maven.apache.org/) as its build tool for its microservice backend.
 * [Download](https://maven.apache.org/download.cgi) and [install](https://maven.apache.org/install.html) Maven
 * Verify your installation with `mvn -v`
 
@@ -55,7 +55,7 @@ _Puff_ uses keycloak as a user management and authentication solution. More info
 * Download and install the standalone server from https://www.keycloak.org/downloads.html.
 * Navigate to your installed keycloak directory and run
 ```shell
-bin/standalone.sh -Djboss.socket.binding.port-offset=100
+./bin/standalone.sh -Djboss.socket.binding.port-offset=100
 ```
 * Setup your admin account by navigating to http://localhost:8180.
 * Navigate to the admin portal from http://localhost:8180/auth/admin
@@ -63,8 +63,9 @@ bin/standalone.sh -Djboss.socket.binding.port-offset=100
 
 #### Setup test account
 * Create two test user accounts and add one each to the `Users` and `Administrators` groups.
+* You can optionally add the `sys` role to a user to test system-secured endpoints.
 * View the test account page at http://localhost:8180/auth/realms/puff/account/.
-* Access a authentication token by making the following curl call
+* Generate an authentication token by making the following curl call **replacing TEST_USER_USERNAME** and **TEST_USER_PASSWORD** with the credentials for the test accounts you created.
 ```shell
 curl -X POST 'http://localhost:8180/auth/realms/puff/protocol/openid-connect/token' \
  --header 'Content-Type: application/x-www-form-urlencoded' \
@@ -96,7 +97,7 @@ _Puff_'s Spring-Boot backend exposes a REST API. The project utilizes [Swagger](
 
 Once you have a microservice running (See [run the backend](#run-the-backend)) visit the following urls to see the REST APIs for the respective microservices:
 * Course-management: http://localhost:8080/swagger-ui.html
-* Test-runner: TBD
+* Test-runner: http://locahost:8083/swagger-ui.html
 * User-management: TBD
 
 A `json` api version to be consumed and used to generate client libraries can be accessed at http://localhost:XXXX/v2/api-docs.
@@ -106,6 +107,7 @@ Select `Authorize` and login with a test user account to try out any of the endp
 ### H2 Database
 _Puff_'s Spring-boot backend uses a H2 runtime database to simulate a database connection for local development. Once the project is running it can be accessed at 
 * Course-management: http://localhost:8080/h2
+* Test-runner: http://localhost:8083/h2
 
 The credentials for the database are as follows:
 ```

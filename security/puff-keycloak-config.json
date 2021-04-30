@@ -82,6 +82,15 @@
         "clientRole": false,
         "containerId": "puff",
         "attributes": {}
+      },
+      {
+        "id": "f502364d-e7b9-4251-bf1a-31f0aca74dfd",
+        "name": "sys",
+        "description": "System role for the puff platform. Used by service accounts for system-level operations.",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "puff",
+        "attributes": {}
       }
     ],
     "client": {
@@ -298,6 +307,7 @@
           "attributes": {}
         }
       ],
+      "puff-service-acc": [],
       "security-admin-console": [],
       "admin-cli": [],
       "user-auth": [],
@@ -313,6 +323,7 @@
           "attributes": {}
         }
       ],
+      "test-runner": [],
       "account": [
         {
           "id": "0941f844-8f7c-4f9f-ac70-b90fc1e2e4d5",
@@ -454,6 +465,39 @@
   "webAuthnPolicyPasswordlessCreateTimeout": 0,
   "webAuthnPolicyPasswordlessAvoidSameAuthenticatorRegister": false,
   "webAuthnPolicyPasswordlessAcceptableAaguids": [],
+  "users": [
+    {
+      "id": "ef94d75a-65a4-40ed-9913-945de93fd550",
+      "createdTimestamp": 1619642807731,
+      "username": "service-account-puff-service-acc",
+      "enabled": true,
+      "totp": false,
+      "emailVerified": false,
+      "serviceAccountClientId": "puff-service-acc",
+      "disableableCredentialTypes": [],
+      "requiredActions": [],
+      "realmRoles": [
+        "user",
+        "admin",
+        "uma_authorization",
+        "offline_access",
+        "sys"
+      ],
+      "clientRoles": {
+        "realm-management": [
+          "view-users"
+        ],
+        "account": [
+          "view-profile",
+          "manage-account"
+        ]
+      },
+      "notBefore": 0,
+      "groups": [
+        "/Users"
+      ]
+    }
+  ],
   "scopeMappings": [
     {
       "clientScope": "offline_access",
@@ -714,6 +758,104 @@
       ]
     },
     {
+      "id": "2411397d-ffcd-426c-bf5e-cf7aef9cbad3",
+      "clientId": "puff-service-acc",
+      "name": "puff-service-acc",
+      "description": "Client used to make realm queries and changes from spring boot",
+      "surrogateAuthRequired": false,
+      "enabled": true,
+      "alwaysDisplayInConsole": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "**********",
+      "redirectUris": [],
+      "webOrigins": [],
+      "notBefore": 0,
+      "bearerOnly": false,
+      "consentRequired": false,
+      "standardFlowEnabled": false,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "publicClient": false,
+      "frontchannelLogout": false,
+      "protocol": "openid-connect",
+      "attributes": {
+        "saml.assertion.signature": "false",
+        "saml.force.post.binding": "false",
+        "saml.multivalued.roles": "false",
+        "saml.encrypt": "false",
+        "saml.server.signature": "false",
+        "saml.server.signature.keyinfo.ext": "false",
+        "exclude.session.state.from.auth.response": "false",
+        "saml_force_name_id_format": "false",
+        "saml.client.signature": "false",
+        "tls.client.certificate.bound.access.tokens": "false",
+        "saml.authnstatement": "false",
+        "display.on.consent.screen": "false",
+        "saml.onetimeuse.condition": "false"
+      },
+      "authenticationFlowBindingOverrides": {},
+      "fullScopeAllowed": true,
+      "nodeReRegistrationTimeout": -1,
+      "protocolMappers": [
+        {
+          "id": "f40de98d-97a4-48c7-b33f-3e03f02bd77e",
+          "name": "Client ID",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "clientId",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "clientId",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "3aa7635a-b793-498a-9468-73a2d60e5633",
+          "name": "Client Host",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "clientHost",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "clientHost",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "0cc8493e-a7c6-46b8-b84d-6c9116577506",
+          "name": "Client IP Address",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "clientAddress",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "clientAddress",
+            "jsonType.label": "String"
+          }
+        }
+      ],
+      "defaultClientScopes": [
+        "web-origins",
+        "role_list",
+        "profile",
+        "roles",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "address",
+        "phone",
+        "offline_access",
+        "microprofile-jwt"
+      ]
+    },
+    {
       "id": "0f18aea9-213b-4917-a31a-084830ab6ad0",
       "clientId": "realm-management",
       "name": "${client_realm-management}",
@@ -817,6 +959,66 @@
       ]
     },
     {
+      "id": "2c6f8ee4-8370-41d0-9288-52cd581ba941",
+      "clientId": "test-runner",
+      "name": "test-runner",
+      "description": "Test runner microservice",
+      "rootUrl": "http://localhost:8083",
+      "adminUrl": "http://localhost:8083",
+      "surrogateAuthRequired": false,
+      "enabled": true,
+      "alwaysDisplayInConsole": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "**********",
+      "redirectUris": [
+        "http://localhost:8083/*"
+      ],
+      "webOrigins": [
+        "http://localhost:8083"
+      ],
+      "notBefore": 0,
+      "bearerOnly": true,
+      "consentRequired": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": false,
+      "publicClient": false,
+      "frontchannelLogout": false,
+      "protocol": "openid-connect",
+      "attributes": {
+        "saml.assertion.signature": "false",
+        "saml.force.post.binding": "false",
+        "saml.multivalued.roles": "false",
+        "saml.encrypt": "false",
+        "saml.server.signature": "false",
+        "saml.server.signature.keyinfo.ext": "false",
+        "exclude.session.state.from.auth.response": "false",
+        "saml_force_name_id_format": "false",
+        "saml.client.signature": "false",
+        "tls.client.certificate.bound.access.tokens": "false",
+        "saml.authnstatement": "false",
+        "display.on.consent.screen": "false",
+        "saml.onetimeuse.condition": "false"
+      },
+      "authenticationFlowBindingOverrides": {},
+      "fullScopeAllowed": true,
+      "nodeReRegistrationTimeout": -1,
+      "defaultClientScopes": [
+        "web-origins",
+        "role_list",
+        "profile",
+        "roles",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "address",
+        "phone",
+        "offline_access",
+        "microprofile-jwt"
+      ]
+    },
+    {
       "id": "6eec7c1a-583f-448e-8db5-2a7e7b18f8ca",
       "clientId": "user-auth",
       "name": "user auth",
@@ -831,9 +1033,11 @@
       "secret": "**********",
       "redirectUris": [
         "http://localhost:8080/*",
+        "http://localhost:8083/*",
         "http://localhost:8090/*"
       ],
       "webOrigins": [
+        "http://localhost:8083",
         "http://localhost:8080",
         "http://localhost:8090"
       ],
