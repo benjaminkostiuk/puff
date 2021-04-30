@@ -52,4 +52,8 @@ public class KeycloakService {
         this.initializeConnection();
         return this.instance;
     }
+
+    public String getRealmName() {
+        return this.realmName;
+    }
 }

@@ -13,6 +13,7 @@ import com.unityTest.testrunner.service.KeycloakService;
 import com.unityTest.testrunner.utils.Utils;
 import org.keycloak.representations.AccessToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -23,6 +24,7 @@ import javax.validation.Valid;
 import org.springframework.data.domain.Pageable;
 
 import java.security.Principal;
+import java.util.List;
 
 /**
  * Rest controller for /case/* endpoints
@@ -50,7 +52,8 @@ public class CaseController implements CaseApi {
         // Convert lang to PLanguage
         PLanguage pLanguage = Utils.parsePLanguage(lang);
         // Retrieve results using service
-        TestCasePage page = new TestCasePage(caseService.getCases(pageable, id, suiteId, functionName, pLanguage, null), keycloakService.getConnection());
+        Page<Case> casePage = caseService.getCases(pageable, id, suiteId, functionName, pLanguage, null);
+        TestCasePage page = new TestCasePage(casePage, keycloakService.getConnection(), keycloakService.getRealmName());
         return new ResponseEntity<>(page, HttpStatus.OK);
     }
 
