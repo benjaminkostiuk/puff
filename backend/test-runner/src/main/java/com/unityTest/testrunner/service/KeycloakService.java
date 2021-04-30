@@ -19,10 +19,10 @@ public class KeycloakService {
     @Value("${keycloak.realm}")
     private String realmName;
 
-    @Value("${keycloak-service.client-id}")
+    @Value("${service-account.client-id}")
     private String clientId;
 
-    @Value("${keycloak-service.client-secret}")
+    @Value("${service-account.client-secret}")
     private String clientSecret;
 
     private Keycloak instance;

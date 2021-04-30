@@ -17,14 +17,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
 
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import org.springframework.data.domain.Pageable;
 
 import java.security.Principal;
-import java.util.List;
 
 /**
  * Rest controller for /case/* endpoints
