@@ -11,6 +11,7 @@ import com.unityTest.testrunner.models.response.SubmissionEvent;
 import com.unityTest.testrunner.repository.SubmissionFileRepository;
 import com.unityTest.testrunner.repository.SubmissionRepository;
 import com.unityTest.testrunner.restApi.SubmissionApi;
+import com.unityTest.testrunner.service.SubmissionService;
 import com.unityTest.testrunner.utils.Utils;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ import java.util.zip.ZipOutputStream;
 public class SubmissionController implements SubmissionApi {
 
     @Autowired
-    private SubmissionRepository submissionRepository;
+    private SubmissionService submissionService;
 
     @Autowired
     private SubmissionFileRepository sourceFileRepository;
@@ -53,7 +54,7 @@ public class SubmissionController implements SubmissionApi {
         String authorId = Utils.getAuthToken(principal).getSubject();
 
         // Save submission to repo
-        Submission submission = submissionRepository.save(new Submission(assignmentId, authorId));
+        Submission submission = submissionService.saveSubmission(new Submission(assignmentId, authorId));
 
         // Save files to repo
         for(MultipartFile file : files) {
@@ -79,18 +80,10 @@ public class SubmissionController implements SubmissionApi {
         response.addHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", ZIP_NAME));
 
         // Fetch Submission from repository
-        Optional<Submission> opt = submissionRepository.findById(submissionId);
-        // Throw exception if submission with id does not exist
-        if(!opt.isPresent()) throw new ElementNotFoundException(Submission.class, "id", submissionId.toString());
-
-        // Extract submission
-        Submission submission = opt.get();
+        Submission submission = submissionService.getSubmissionById(submissionId);
         // Get id from token in request
         String authorId = Utils.getAuthToken(principal).getSubject();
         // Check that the author is the person requesting the files
-        System.out.println(authorId);
-        System.out.println(submission.getAuthorId());
-
         if(!authorId.equals(submission.getAuthorId())) throw new AccessDeniedException("Access denied");
 
         // Create output stream to stream zipped files
