@@ -64,3 +64,11 @@ keycloak:
 keycloak-service:
   client-id: realm-manager
   client-secret: 6d29c988-5da1-4528-9058-c288f0434e89   # DO NOT INCLUDE IN PROD
+
+code-runner:
+  dir:
+    path: /mnt/d/Projects/puffTest
+  cmds:
+    python3: pytest
+    java: TODO
+    haskell: TODO
