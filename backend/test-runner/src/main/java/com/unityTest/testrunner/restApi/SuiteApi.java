@@ -4,6 +4,7 @@ import com.unityTest.testrunner.entity.Suite;
 import com.unityTest.testrunner.models.response.FileInfo;
 import com.unityTest.testrunner.models.page.SuitePage;
 import com.unityTest.testrunner.models.response.FileUploadEvent;
+import com.unityTest.testrunner.models.response.TestResult;
 import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,6 +20,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.List;
 
 @Api(value = "Test suite API", tags = "Test suite API", description = "Manage and run test suites")
 @Validated
@@ -98,14 +100,16 @@ public interface SuiteApi extends BaseApi {
     );
 
     /**
-     * POST endpoint to run a test suite using source files from a submission
-     * @return
+     * POST endpoint to run test cases in test suite using source files from a submission
+     * @return Stream of TestResults from running the test cases
      */
-    // TODO Update this to use different response
-    @ApiOperation(value = "Run a test suite", nickname = "runTestSuite", response = Suite.class, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PostMapping(value = "/run", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Run test cases in a test suite", nickname = "runTestCases", response = TestResult.class, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/{suiteId}/run", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<ResponseBodyEmitter> runTestSuite(
-            @ApiParam(value = "Test suite id", required = true) @RequestParam(value = "id") Integer suiteId,
+            @ApiIgnore Principal principal,
+            @ApiParam(value = "Test suite id", required = true) @PathVariable(value = "suiteId") Integer suiteId,
+            @ApiParam(value = "Test case ids") @RequestParam(value = "ids", required = false) List<Integer> ids,
+            @ApiParam(value = "Limit on number of cases run", defaultValue = "20") @RequestParam(value = "limit", required = false) Integer limit,
             @ApiParam(value = "Submission id") @RequestParam(value = "submissionId", required = false) Integer submissionId
     );
 }

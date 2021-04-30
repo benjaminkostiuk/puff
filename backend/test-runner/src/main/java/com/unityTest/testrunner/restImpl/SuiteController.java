@@ -1,5 +1,6 @@
 package com.unityTest.testrunner.restImpl;
 
+import com.unityTest.testrunner.entity.Submission;
 import com.unityTest.testrunner.entity.Suite;
 import com.unityTest.testrunner.entity.SuiteFile;
 import com.unityTest.testrunner.models.PLanguage;
@@ -8,13 +9,14 @@ import com.unityTest.testrunner.models.page.SuitePage;
 import com.unityTest.testrunner.models.response.FileInfo;
 import com.unityTest.testrunner.models.response.FileUploadEvent;
 import com.unityTest.testrunner.restApi.SuiteApi;
+import com.unityTest.testrunner.service.CodeService;
+import com.unityTest.testrunner.service.SubmissionService;
 import com.unityTest.testrunner.service.SuiteService;
 import com.unityTest.testrunner.utils.Utils;
 import org.keycloak.representations.AccessToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +29,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.Principal;
+import java.util.List;
 
 /**
  * Rest Controller for the /suite endpoint
@@ -36,6 +39,12 @@ public class SuiteController implements SuiteApi {
 
     @Autowired
     private SuiteService suiteService;
+
+    @Autowired
+    private SubmissionService submissionService;
+
+    @Autowired
+    private CodeService codeService;
 
     @Override
     public ResponseEntity<Suite> createTestSuite(Principal principal, @Valid Suite suite) {
@@ -97,7 +106,28 @@ public class SuiteController implements SuiteApi {
     }
 
     @Override
-    public ResponseEntity<ResponseBodyEmitter> runTestSuite(Integer suiteId, Integer submissionId) {
-        return null;
+    public ResponseEntity<ResponseBodyEmitter> runTestSuite(Principal principal, Integer suiteId, List<Integer> ids, Integer limit, Integer submissionId) {
+        Suite suite = suiteService.getSuiteById(suiteId);                   // Get suite with id
+        String authorId = Utils.getAuthToken(principal).getSubject();       // Get requester's authorId
+
+        // Find submission by id if present, otherwise find the latest submission
+        Submission submission = submissionId != null
+                ? submissionService.getSubmissionById(submissionId)
+                : submissionService.getLatestSubmissionForAssignment(authorId, suite.getAssignmentId());
+        // Set default max case count to 20
+        int maxCaseCount = limit == null ? 20 : limit;
+
+        // Find all test cases respecting limit
+        // criterion suiteId,
+
+        // Create emitter to send back results
+        final ResponseBodyEmitter emitter = new ResponseBodyEmitter();
+        try {
+            codeService.asyncDoSomething(emitter);
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            emitter.completeWithError(e);
+        }
+        return new ResponseEntity<>(emitter, HttpStatus.OK);
     }
 }

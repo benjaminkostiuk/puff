@@ -86,9 +86,4 @@ public class CaseController implements CaseApi {
         VoteAction voteAction = Utils.parseVoteAction(action);
         caseService.updateCaseUpvotes(caseId, voteAction);
     }
-
-    @Override
-    public ResponseEntity<ResponseBodyEmitter> runTestCases(List<Integer> ids, Integer submissionId) {
-        return null;
-    }
 }

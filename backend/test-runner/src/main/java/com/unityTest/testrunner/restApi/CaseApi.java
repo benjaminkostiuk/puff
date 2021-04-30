@@ -90,16 +90,4 @@ public interface CaseApi extends BaseApi {
             @ApiParam(value = "Test case id", required = true) @PathVariable(value = "caseId") Integer caseId,
             @ApiParam(value = "Vote action", required = true) @RequestParam(value = "action") String action
     );
-
-    /**
-     * POST endpoint to run test cases
-     * Pass case ids to run with the ids query. Optionally specify the source file submission id to use.
-     * @return TODO figure this out
-     */
-    @ApiOperation(value = "Run test cases", nickname = "runTestCases", response = Case.class, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PostMapping(value = "/run", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<ResponseBodyEmitter> runTestCases(
-            @ApiParam(value = "Test case ids", required = true) @RequestParam(value = "ids") List<Integer> ids,
-            @ApiParam(value = "Submission id") @RequestParam(value = "submissionId", required = false) Integer submissionId
-    );
 }
