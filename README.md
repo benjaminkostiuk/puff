@@ -58,7 +58,9 @@ _Puff_ uses keycloak as a user management and authentication solution. More info
 ```shell
 ./bin/standalone.sh -Djboss.socket.binding.port-offset=100
 ```
+<dl>
 <dd>or if  you are using Windows instead run</dd>
+</dl>
 ```shell
 ./bin/standalone.bat -Djboss.socket.binding.port-offset=100
 ```
