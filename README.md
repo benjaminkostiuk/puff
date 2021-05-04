@@ -58,13 +58,10 @@ _Puff_ uses keycloak as a user management and authentication solution. More info
 ```shell
 ./bin/standalone.sh -Djboss.socket.binding.port-offset=100
 ```
-<dl>
-<dd>or if  you are using Windows instead run</dd>
-</dl>
+* If you are using Windows instead run</dd>
 ```shell
 ./bin/standalone.bat -Djboss.socket.binding.port-offset=100
 ```
-
 * Setup your admin account by navigating to http://localhost:8180.
 * Navigate to the admin portal from http://localhost:8180/auth/admin
 * When you log in you should be on the Master realm. Hover over the dropdown arrow and then click Add realm.
