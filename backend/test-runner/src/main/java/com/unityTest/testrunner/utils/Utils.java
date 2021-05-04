@@ -6,6 +6,7 @@ import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.keycloak.representations.AccessToken;
 
 import java.security.Principal;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.IntStream;
@@ -58,5 +59,15 @@ public class Utils {
 
     public static boolean isAuthorOrAdmin(AccessToken accessToken, String authorId) {
         return authorId.equals(accessToken.getSubject()) || isAdminUser(accessToken);
+    }
+
+    public static String buildPath(String... dirs) {
+        return String.join("/", dirs);
+    }
+
+    // Indents a function body by *n* indents, can be replaced if project upgrades to java 12
+    public static String indent(String body, int n) {
+        String tab = String.join("", Collections.nCopies(n, "\t"));
+        return tab + body.replace("\n", "\n"+tab);
     }
 }
