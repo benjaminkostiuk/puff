@@ -1,20 +1,22 @@
 package com.unityTest.testrunner.restImpl;
 
-import com.unityTest.testrunner.entity.Submission;
-import com.unityTest.testrunner.entity.Suite;
-import com.unityTest.testrunner.entity.SuiteFile;
+import com.unityTest.testrunner.entity.*;
 import com.unityTest.testrunner.models.PLanguage;
 import com.unityTest.testrunner.models.VoteAction;
 import com.unityTest.testrunner.models.page.SuitePage;
 import com.unityTest.testrunner.models.response.FileInfo;
 import com.unityTest.testrunner.models.response.FileUploadEvent;
 import com.unityTest.testrunner.restApi.SuiteApi;
+import com.unityTest.testrunner.service.CaseService;
 import com.unityTest.testrunner.service.CodeService;
 import com.unityTest.testrunner.service.SubmissionService;
 import com.unityTest.testrunner.service.SuiteService;
 import com.unityTest.testrunner.utils.Utils;
+import lombok.extern.slf4j.Slf4j;
 import org.keycloak.representations.AccessToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -34,11 +36,15 @@ import java.util.List;
 /**
  * Rest Controller for the /suite endpoint
  */
+@Slf4j
 @RestController
 public class SuiteController implements SuiteApi {
 
     @Autowired
     private SuiteService suiteService;
+
+    @Autowired
+    private CaseService caseService;
 
     @Autowired
     private SubmissionService submissionService;
@@ -108,24 +114,30 @@ public class SuiteController implements SuiteApi {
     @Override
     public ResponseEntity<ResponseBodyEmitter> runTestSuite(Principal principal, Integer suiteId, List<Integer> ids, Integer limit, Integer submissionId) {
         Suite suite = suiteService.getSuiteById(suiteId);                   // Get suite with id
+        SuiteFile suiteFile = suiteService.getSuiteTestFile(suiteId);       // Get suiteFile with suite id
         String authorId = Utils.getAuthToken(principal).getSubject();       // Get requester's authorId
 
         // Find submission by id if present, otherwise find the latest submission
         Submission submission = submissionId != null
                 ? submissionService.getSubmissionById(submissionId)
                 : submissionService.getLatestSubmissionForAssignment(authorId, suite.getAssignmentId());
-        // Set default max case count to 20
-        int maxCaseCount = limit == null ? 20 : limit;
 
-        // Find all test cases respecting limit
-        // criterion suiteId,
-
+        final int DEFAULT_LIMIT = 20;
+        // Get the list of test cases to run. If no ids are provided take the top x ranked by upvotes, where x is limit (default 20)
+        List<Case> cases;
+        if(ids == null || ids.size() == 0) {
+            int maxCaseCount = limit == null ? DEFAULT_LIMIT : limit;
+            Pageable pageable = PageRequest.of(0, maxCaseCount, Sort.Direction.DESC, Case_.UPVOTES);
+            cases = caseService.getCases(pageable, null, suiteId, null, null, null).getContent();
+        } else {
+            cases = caseService.getCases(ids, suiteId);
+        }
         // Create emitter to send back results
         final ResponseBodyEmitter emitter = new ResponseBodyEmitter();
         try {
-            codeService.asyncDoSomething(emitter);
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+            codeService.runTestCasesInSuite(emitter, submission, suite, suiteFile, cases);
+        } catch (Exception e) {
+            log.error(e.getMessage());
             emitter.completeWithError(e);
         }
         return new ResponseEntity<>(emitter, HttpStatus.OK);

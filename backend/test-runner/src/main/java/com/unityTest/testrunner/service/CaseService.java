@@ -96,6 +96,25 @@ public class CaseService {
     }
 
     /**
+     * Get a list of test cases that match the given list of ids
+     * Optionally specify that all cases are part of the same suite
+     * @param ids List of case ids to retrieve from the repo
+     * @param suiteId Suite id that cases should be part of, otherwise null
+     * @return List of test cases with the given ids, constrained by the given suite id
+     */
+    public List<Case> getCases(List<Integer> ids, Integer suiteId) {
+        // Find all cases with ids
+        List<Case> cases = caseRepository.findAllById(ids);
+        // If suite id is specified constrain all cases to be part of the suite
+        if(suiteId != null) {
+            for(Case caze: cases) {
+                if(caze.getSuite().getId() != suiteId) throw new ElementNotFoundException(Case.class, "id", String.valueOf(caze.getId()), "suite id", String.valueOf(suiteId));
+            }
+        }
+        return cases;
+    }
+
+    /**
      * Find a case by id
      * @param id Id of case to find
      * @return Case with matching id from JPA repo
