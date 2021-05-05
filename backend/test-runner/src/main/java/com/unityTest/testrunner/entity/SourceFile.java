@@ -25,6 +25,8 @@ public class SourceFile {
     @Column(name = "AUTHOR_ID")
     private String authorId;
 
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
     @Column(name = "CONTENT")
     private byte[] content;
 }
