@@ -17,8 +17,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class CaseService {
@@ -102,9 +104,20 @@ public class CaseService {
      * @param suiteId Suite id that cases should be part of, otherwise null
      * @return List of test cases with the given ids, constrained by the given suite id
      */
-    public List<Case> getCases(List<Integer> ids, Integer suiteId) {
+    public List<Case> getCases(List<Integer> ids, Integer suiteId) throws ElementNotFoundException {
         // Find all cases with ids
         List<Case> cases = caseRepository.findAllById(ids);
+
+        // Check that all cases have been found, if not throw exception
+        if(ids.size() != cases.size()) {
+            Set<Integer> toBeFound = new HashSet<>(ids);
+            for(Case caze: cases) {
+                toBeFound.remove(caze.getId());
+            }
+            Integer notFound = toBeFound.iterator().next();
+            throw new ElementNotFoundException(Case.class, "id", String.valueOf(notFound));
+        }
+
         // If suite id is specified constrain all cases to be part of the suite
         if(suiteId != null) {
             for(Case caze: cases) {
