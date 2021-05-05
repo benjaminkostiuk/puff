@@ -25,7 +25,7 @@
 ## Motivation
 Let's face it. _Everyone writes their test cases last_.
 
-Unless you're someone who lives by <a href="https://en.wikipedia.org/wiki/Test-driven_development" target="_blank">TDD</a>, you're like the rest of us lazy developers and write your test cases as the last part of your assignment. But before you start writing you'll run several rounds of sanity checks (_smoke tests_) to make sure your project works as expected.
+Unless you're someone who lives by [TDD](https://en.wikipedia.org/wiki/Test-driven_development), you're like the rest of us lazy developers and write your test cases as the last part of your assignment. But before you start writing you'll run several rounds of sanity checks (_smoke tests_) to make sure your project works as expected.
 
 Now imagine instead of only having the four quick cases you thought up, you also had the ones from your friends also working on the project. Or the ones from the entire class. These quick and dirty smoke tests can help you rat out bugs __before__ you start writing out the fancy test suite you're going to pretend you used to test your assignment.
 
@@ -36,43 +36,44 @@ We all want to make sure our assignment actually performs _according to the requ
 Clone the project with `git clone https://github.com/benjaminkostiuk/unity-test.git`
 
 ### Install Java
-_Puff_ uses a microservice architecture with <a href="https://spring.io/projects/spring-boot" target="_blank">Spring Boot</a> written in Java
+_Puff_ uses a microservice architecture with [Spring Boot](https://spring.io/projects/spring-boot) written in Java.
 
-* Download and install the <a href="https://www.oracle.com/ca-en/java/technologies/javase/javase-jdk8-downloads.html" target="_blank">Java JDK 8</a>
+* Download and install the [Java JDK 8](https://www.oracle.com/ca-en/java/technologies/javase/javase-jdk8-downloads.html)
 * Set the `JAVA_HOME` environment variable
 * Verify your installation by running `java -version`
 
 ### Install Maven
-_Puff_ uses <a href="https://maven.apache.org/" target="_blank">Maven</a> as its build tool for its microservice backend.
-* <a href="https://maven.apache.org/download.cgi" target="_blank">Download</a> and <a href="https://maven.apache.org/install.html" target="_blank">Install</a> Maven
+_Puff_ uses [Maven](https://maven.apache.org/) as its build tool for its microservice backend.
+* [Download](https://maven.apache.org/download.cgi) and [install](https://maven.apache.org/install.html) Maven
 * Make sure to add the bin directory of the created maven directory to your PATH
 * Verify your installation with `mvn -v`
 
 ### Setup Keycloak
 > Keycloak is an open source Identity and Access Management solution aimed at modern applications and services. It makes it easy to secure applications and services with little to no code.
 
-_Puff_ uses keycloak as a user management and authentication solution. More information about Keycloak can be found on their <a href="https://www.keycloak.org/docs/latest/index.html" target="_blank">offical docs page</a>.
+_Puff_ uses keycloak as a user management and authentication solution. More information about Keycloak can be found on their [offical docs page](https://www.keycloak.org/docs/latest/index.html).
 
-* Download and install the standalone server from <a href="https://www.keycloak.org/downloads.html" target="_blank">here</a>.
-* Navigate to your installed keycloak directory and run
+* Download and install the standalone server from https://www.keycloak.org/downloads.html.
+* Navigate to your installed keycloak directory and run the following command:
+* (Linux/Mac)
 ```shell
 ./bin/standalone.sh -Djboss.socket.binding.port-offset=100
 ```
-* If you are using Windows instead run</dd>
+* Windows
 ```shell
 ./bin/standalone.bat -Djboss.socket.binding.port-offset=100
 ```
 * Setup your admin account by navigating to http://localhost:8180.
 * Navigate to the admin portal from http://localhost:8180/auth/admin
-* When you log in you should be on the Master realm. Hover over the dropdown arrow and then click Add realm.
+* When you log in you should be on the Master realm. Hover over the dropdown arrow and then click *Add realm*.
 * Import the realm settings, configuration and clients using the [puff-keycloak-config.json](security/puff-keycloak-config.json) file located in the security folder.
 
 #### Setup test account
-* Create two test user accounts and add one each to the `Users` and `Administrators` groups.
+* Create two test user accounts. They will automatically be added to the `Users` group. Add one of them to the `Administrators` group.
 * You can optionally add the `sys` role to a user to test system-secured endpoints.
 * View the test account page at http://localhost:8180/auth/realms/puff/account/.
-* If you have already generated a secret ignore this step. Otherwise, on your admin account navigate to Clients > user-auth > Credentials and click Regenerate Secret.
-* Generate an authentication token by making the following curl call **replacing TEST_USER_USERNAME**, **TEST_USER_PASSWORD** and **USER_AUTH_CLIENT_SECRET** with the credentials for the test accounts you created and the secret for the client id (user-auth).
+* If you have already generated a secret for both user-auth and puff-service-acc ignore this step. Otherwise, navigate to the admin portal from http://localhost:8180/auth/admin and log in. Once logged in, navigate to Clients > user-auth > Credentials and click Regenerate Secret. Repeat this for Clients > puff-service-acc.
+* Generate an authentication token by making the following curl call **replacing TEST_USER_USERNAME**, **TEST_USER_PASSWORD** and **USER_AUTH_CLIENT_SECRET** with the credentials for the test accounts you created and the client-secret for user-auth.
 ```shell
 curl -X POST 'http://localhost:8180/auth/realms/puff/protocol/openid-connect/token' \
  --header 'Content-Type: application/x-www-form-urlencoded' \
