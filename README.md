@@ -45,6 +45,7 @@ _Puff_ uses a microservice architecture with [Spring Boot](https://spring.io/pro
 ### Install Maven
 _Puff_ uses [Maven](https://maven.apache.org/) as its build tool for its microservice backend.
 * [Download](https://maven.apache.org/download.cgi) and [install](https://maven.apache.org/install.html) Maven
+* Make sure to add the bin directory of the created maven directory to your PATH
 * Verify your installation with `mvn -v`
 
 ### Setup Keycloak
@@ -53,19 +54,26 @@ _Puff_ uses [Maven](https://maven.apache.org/) as its build tool for its microse
 _Puff_ uses keycloak as a user management and authentication solution. More information about Keycloak can be found on their [offical docs page](https://www.keycloak.org/docs/latest/index.html).
 
 * Download and install the standalone server from https://www.keycloak.org/downloads.html.
-* Navigate to your installed keycloak directory and run
+* Navigate to your installed keycloak directory and run the following command:
+* (Linux/Mac)
 ```shell
 ./bin/standalone.sh -Djboss.socket.binding.port-offset=100
 ```
+* Windows
+```shell
+./bin/standalone.bat -Djboss.socket.binding.port-offset=100
+```
 * Setup your admin account by navigating to http://localhost:8180.
 * Navigate to the admin portal from http://localhost:8180/auth/admin
+* When you log in you should be on the Master realm. Hover over the dropdown arrow and then click *Add realm*.
 * Import the realm settings, configuration and clients using the [puff-keycloak-config.json](security/puff-keycloak-config.json) file located in the security folder.
 
 #### Setup test account
-* Create two test user accounts and add one each to the `Users` and `Administrators` groups.
+* Create two test user accounts. They will automatically be added to the `Users` group. Add one of them to the `Administrators` group.
 * You can optionally add the `sys` role to a user to test system-secured endpoints.
 * View the test account page at http://localhost:8180/auth/realms/puff/account/.
-* Generate an authentication token by making the following curl call **replacing TEST_USER_USERNAME** and **TEST_USER_PASSWORD** with the credentials for the test accounts you created.
+* If you have already generated a secret for both user-auth and puff-service-acc ignore this step. Otherwise, navigate to the admin portal from http://localhost:8180/auth/admin and log in. Once logged in, navigate to Clients > user-auth > Credentials and click Regenerate Secret. Repeat this for Clients > puff-service-acc.
+* Generate an authentication token by making the following curl call **replacing TEST_USER_USERNAME**, **TEST_USER_PASSWORD** and **USER_AUTH_CLIENT_SECRET** with the credentials for the test accounts you created and the client-secret for user-auth.
 ```shell
 curl -X POST 'http://localhost:8180/auth/realms/puff/protocol/openid-connect/token' \
  --header 'Content-Type: application/x-www-form-urlencoded' \
