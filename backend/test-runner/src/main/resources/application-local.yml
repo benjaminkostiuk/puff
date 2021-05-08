@@ -30,7 +30,7 @@ swagger:
   auth:
     token-url: http://localhost:8180/auth/realms/puff/protocol/openid-connect/token
     client-id: user-auth
-    client-secret: f80e13fa-5e3f-4078-939f-4e2d084c38da   # Replace with client id for user-auth
+    client-secret: f80e13fa-5e3f-4078-939f-4e2d084c38da   # DO NOT INCLUDE IN PROD
   api:
     title: Test Runner REST Api
     description: Test Runner REST Api documentation and management
@@ -60,3 +60,16 @@ keycloak:
   resource: test-runner
   principal-attribute: preferred_username
   bearer-only: true
+
+service-account:
+  client-id: puff-service-acc
+  client-secret: 6d29c988-5da1-4528-9058-c288f0434e89   # DO NOT INCLUDE IN PROD
+
+code-runner:
+  max-timeout: 30
+  dir:
+    path: /mnt/d/Projects/puffTest
+  cmds:
+    python3: pytest
+    java: TODO
+    haskell: TODO

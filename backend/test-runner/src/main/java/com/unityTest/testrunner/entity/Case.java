@@ -1,20 +1,21 @@
 package com.unityTest.testrunner.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.unityTest.testrunner.models.PLanguage;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import com.unityTest.testrunner.models.response.Author;
+import com.unityTest.testrunner.models.response.CaseStats;
+import com.unityTest.testrunner.models.response.TestCase;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 /**
  * Models a test case in a test suite
  */
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
-@ApiModel(value = "TestCase", description = "Models a test case in a test suite")
 @Entity
 @Table(name = "TEST_CASE")
 public class Case {
@@ -33,37 +34,60 @@ public class Case {
     )
     private int id;
 
-    // Id of test suite that case belongs to
-    @ApiModelProperty(value = "Test suite id", required = true, example = "1012")
-    @Column(name = "SUITE_ID")
-    private int suiteId;
+    // Test suite that case belongs to
+    @ManyToOne
+    @JoinColumn(name = "SUITE_ID", referencedColumnName = "ID", nullable = false)
+    private Suite suite;
 
     // Author id
-    @JsonIgnore
-    @NotNull
     @Column(name = "AUTHOR_ID")
     private String authorId;
 
-    @ApiModelProperty(value = "Case description", example = "Tests boundary case if x = 0 for FUNC A")
+    // Name of function for test case code snippet
+    @Column(name = "FUNCTION_NAME")
+    private String functionName;
+
+    // Optional description of test case
     @Column(name = "DESCRIPTION")
     private String description;
 
-    @ApiModelProperty(value = "Number of runs")
+    // Number of upvotes for test case, needed for easy sorting & pagination when pulling test cases
+    @Column(name = "UPVOTE_COUNT")
+    private int upvotes;
+
     @Column(name = "RUN_COUNT")
     private int runCount;
 
-    @ApiModelProperty(value = "Number of passed runs")
     @Column(name = "PASS_COUNT")
     private int passCount;
 
-    @ApiModelProperty(value = "Language", required = true, example = "JAVA")
     @Enumerated(EnumType.STRING)
-    @NotNull
     @Column(name = "LANG")
     private PLanguage language;
 
-    @ApiModelProperty(value = "Case code", required = true)
-    @NotNull
     @Column(name = "CODE")
     private String code;
+
+    public Case(Suite suite, String authorId, String functionName, String description, PLanguage language, String code) {
+        this(0, suite, authorId, functionName, description, 0, 0, 0, language, code);
+    }
+
+    /**
+     * Convert case to TestCase Api response object
+     * @param author Author object to set in TestCase
+     * @return TestCase response object with author
+     */
+    public TestCase toTestCase(Author author) {
+        TestCase testCase = this.toTestCase();
+        testCase.setAuthor(author);
+        return testCase;
+    }
+
+    /**
+     * Convert case to TestCase Api response object
+     * @return TestCase response object
+     */
+    public TestCase toTestCase() {
+        return new TestCase(this.id, this.suite, this.description, this.language, null, this.upvotes, new CaseStats(this.runCount, this.passCount), this.code);
+    }
 }

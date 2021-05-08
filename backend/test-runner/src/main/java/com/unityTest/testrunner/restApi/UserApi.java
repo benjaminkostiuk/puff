@@ -1,6 +1,7 @@
 package com.unityTest.testrunner.restApi;
 
-import com.unityTest.testrunner.models.page.CasePage;
+import com.unityTest.testrunner.models.page.SuitePage;
+import com.unityTest.testrunner.models.page.TestCasePage;
 import com.unityTest.testrunner.models.page.SubmissionEventPage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -21,16 +22,35 @@ import java.security.Principal;
 public interface UserApi extends BaseApi {
 
     /**
+     * GET endpoint to retrieve test suites created by the user
+     * Filter by id, assignment id, name and programming language
+     * @return Pageable view of test suites matching query criteria created by the user
+     */
+    @ApiOperation(value = "Retrieve a pageable view of test suites created by the user", nickname = "getUserTestSuites", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/suites", produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<SuitePage> getUserTestSuites(
+            @ApiIgnore Principal principal,
+            Pageable pageable,
+            @ApiParam("Suite id") @RequestParam(value = "id", required = false) Integer id,
+            @ApiParam("Assignment id") @RequestParam(value = "assignmentId", required = false) Integer assignmentId,
+            @ApiParam("Name") @RequestParam(value = "name", required = false) String name,
+            @ApiParam("Programming language") @RequestParam(value = "lang", required = false) String lang
+    );
+
+    /**
      * GET endpoint to retrieve test cases written by the user
-     * Filter by id and suite id
-     * @return Pageable view of test cases matching query criteria
+     * Filter by id, suite id, function name and programming language
+     * @return Pageable view of test cases matching query criteria created by the user
      */
     @ApiOperation(value = "Retrieve a pageable view of test cases written by the user", nickname = "getUserTestCases", produces = MediaType.APPLICATION_JSON_VALUE)
     @GetMapping(value = "/cases", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<CasePage> getUserTestCases(
-        Pageable pageable,
-        @ApiParam("Test case id") @RequestParam(value = "id", required = false) Integer id,
-        @ApiParam("Suite id") @RequestParam(value = "suiteId", required = false) Integer suiteId
+    ResponseEntity<TestCasePage> getUserTestCases(
+            @ApiIgnore Principal principal,
+            Pageable pageable,
+            @ApiParam("Test case id") @RequestParam(value = "id", required = false) Integer id,
+            @ApiParam("Suite id") @RequestParam(value = "suiteId", required = false) Integer suiteId,
+            @ApiParam("Function name") @RequestParam(value = "name", required = false) String functionName,
+            @ApiParam("Programming language") @RequestParam(value = "lang", required = false) String lang
     );
 
     /**

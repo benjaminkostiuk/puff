@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Models a submission of code files to be tested
+ */
 @Data
 @NoArgsConstructor
 @Entity
@@ -34,9 +37,9 @@ public class Submission {
     private int id;
 
     // List of source files uploaded by the submission
-    @OneToMany(targetEntity = SourceFile.class, mappedBy = "submission", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(targetEntity = SubmissionFile.class, mappedBy = "submission", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<SourceFile> sourceFiles = new ArrayList<>();
+    private List<SubmissionFile> sourceFiles = new ArrayList<>();
 
     // Id of related assignment
     @Column(name = "ASSIGNMENT_ID")
@@ -71,7 +74,7 @@ public class Submission {
      * Add a source file to the submission
      * @param file SourceFile to add
      */
-    public void addSourceFile(SourceFile file) {
+    public void addSubmissionFile(SubmissionFile file) {
         this.sourceFiles.add(file);
     }
 }
