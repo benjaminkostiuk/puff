@@ -22,6 +22,10 @@
   <a href="#getting-started">Getting started</a>&nbsp;|&nbsp;<a href="#motivation">Motivation</a>&nbsp;|&nbsp;<a href="#supported-languages">Supported Languages</a>&nbsp;|&nbsp;<a href="#contributors">Contributors</a>
 </p>
 
+## This project has moved!
+The _Puff Project_ has moved to https://github.com/puffproject where it will continue its development!
+
+
 ## Motivation
 Let's face it. _Everyone writes their test cases last_.
 
